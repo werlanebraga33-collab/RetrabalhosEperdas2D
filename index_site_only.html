@@ -1,0 +1,244 @@
+
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Retrabalho v4 – Qtde 4 dígitos</title>
+  <style>
+    :root{
+      --bg:#f6f7f9; --card:#fff; --text:#111; --muted:#667085; --line:#E5E7EB;
+      --primary:#111; --radius:18px;
+    }
+    *{box-sizing:border-box}
+    body{margin:0;background:var(--bg);font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,'Helvetica Neue',Arial,"Noto Sans",sans-serif;color:var(--text)}
+    .wrap{max-width:980px;margin:0 auto;padding:16px 16px 28px}
+    h1{font-size:22px;letter-spacing:-.3px;margin:8px 0 10px}
+    .card{background:var(--card);border-radius:var(--radius);box-shadow:0 4px 20px rgba(0,0,0,.06);padding:14px}
+    .grid{display:grid;gap:10px}
+    .g2{grid-template-columns:1fr 1fr}
+    .g3{grid-template-columns:1fr 1fr 1fr}
+    .g4{grid-template-columns:1fr 1fr 1fr 1fr}
+    label{font-size:12px;color:var(--muted)}
+    input,textarea,select{width:100%;padding:10px 12px;border:1px solid var(--line);border-radius:12px;background:#fff;font-size:14px}
+    textarea{min-height:42px;resize:vertical}
+    .row{display:flex;gap:10px;align-items:center}
+    .btn{appearance:none;border:1px solid var(--line);background:#fff;border-radius:12px;padding:10px 12px;font-weight:600;font-size:14px}
+    .btn.primary{background:#111;color:#fff;border-color:#111}
+    .muted{color:var(--muted);font-size:12px}
+    .editor-row{display:grid;grid-template-columns:1.15fr .55fr 1.5fr 46px;gap:8px;align-items:start}
+    .del{border:none;background:#fff;color:#b91c1c;font-weight:700;border-radius:10px}
+    .total-val{font-size:13px}
+    /* Tabela que vira imagem */
+    .sheet{background:#fff;border-radius:20px;padding:14px;border:1px solid var(--line)}
+    .hdr{display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--line);padding-bottom:8px}
+    .hdr .brand{font-weight:700}
+    .hdr small{color:var(--muted)}
+    table{width:100%;border-collapse:collapse;table-layout:fixed}
+    thead th{background:#f3f4f6;text-align:left;font-size:13px}
+    th, td{border:1px solid var(--line);padding:8px;vertical-align:top;font-size:13px;word-wrap:break-word;overflow-wrap:break-word}
+    /* Larguras ajustadas: Motivo 40%, Qtde 14% (não quebra), Justificativa resto */
+    th.motivo, td.motivo{width:40%}
+    th.qtde, td.qtde{width:14%; text-align:center; white-space:nowrap; font-variant-numeric: tabular-nums;}
+    th.just, td.just{width:auto}
+    tfoot td{background:#fafafa;font-weight:700}
+    .preview{border:1px dashed var(--line);border-radius:16px;overflow:hidden;max-width:100%}
+    @media (max-width:720px){
+      .g3,.g4{grid-template-columns:1fr 1fr}
+      .editor-row{grid-template-columns:1fr .6fr 1fr 40px}
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <h1>Gerador de Tabela – Retrabalho (v4 – Qtde até 4 dígitos)</h1>
+
+    <div class="card grid" style="margin-bottom:12px;">
+      <div class="grid g4">
+        <div><label>Setor</label><input id="setor" value="Grendene – Impressão Digital"></div>
+        <div><label>Responsável</label><input id="resp" placeholder="Ex.: José V. B. Oliveira"></div>
+        <div><label>Turno</label>
+          <select id="turno">
+            <option>1º</option>
+            <option selected>2º</option>
+            <option>3º</option>
+          </select>
+        </div>
+        <div><label>Data</label><input id="data" type="date"></div>
+      </div>
+      <div class="grid g2">
+        <div><label>Ramais</label><input id="ramais" placeholder="Ex.: R2, R3, R4, R5, R6"></div>
+        <div class="row" style="align-items:flex-end;justify-content:flex-end;">
+          <button class="btn" id="add">+ Adicionar linha</button>
+          <button class="btn primary" id="share">Gerar & Compartilhar</button>
+          <button class="btn" id="download">Baixar PNG</button>
+        </div>
+      </div>
+      <div class="muted">No editor abaixo, preencha os itens. A tabela final usa <b>texto puro</b>.</div>
+      <div id="editor" class="grid" style="margin-top:8px"></div>
+      <div class="row" style="justify-content:space-between;margin-top:6px">
+        <div class="muted">Dica: apenas números em “Qtde”.</div>
+        <div class="total-val">Total: <b id="total">0</b></div>
+      </div>
+    </div>
+
+    <!-- Planilha renderizada (somente texto) -->
+    <div class="sheet" id="sheet">
+      <div class="hdr">
+        <div class="brand" id="out-setor">Grendene – Impressão Digital</div>
+        <small>Formulário de retrabalho</small>
+      </div>
+      <div class="grid g4" style="margin:8px 0 10px">
+        <div><small class="muted">Responsável:</small> <b id="out-resp"></b></div>
+        <div><small class="muted">Turno:</small> <b id="out-turno">2º</b></div>
+        <div><small class="muted">Data:</small> <b id="out-data"></b></div>
+        <div><small class="muted">Ramais:</small> <b id="out-ramais"></b></div>
+      </div>
+
+      <table id="tbl">
+        <colgroup>
+          <col style="width:40%">
+          <col style="width:14%">
+          <col>
+        </colgroup>
+        <thead>
+          <tr>
+            <th class="motivo">Motivo</th>
+            <th class="qtde">Qtde.</th>
+            <th class="just">Justificativa</th>
+          </tr>
+        </thead>
+        <tbody id="tbody"></tbody>
+        <tfoot>
+          <tr>
+            <td>TOTAL</td>
+            <td id="sum">0</td>
+            <td></td>
+          </tr>
+        </tfoot>
+      </table>
+      <div class="muted" style="margin-top:8px">Gerado em <span id="now"></span></div>
+    </div>
+
+    <div class="grid" style="margin-top:12px">
+      <div class="muted">Prévia (após gerar):</div>
+      <img id="preview" class="preview" alt="" />
+    </div>
+  </div>
+
+  <!-- libs via CDN -->
+  <script src="https://unpkg.com/html-to-image@1.11.11/dist/html-to-image.js"></script>
+
+  <script>
+    const editor = document.getElementById('editor');
+    const tbody = document.getElementById('tbody');
+    const items = [];
+
+    const motivesDefault = [
+      "Manchas - imp",
+      "Logo sem definição - imp",
+      "Falha de impressão - imp",
+      "Troca de Imagem - imp",
+      "Filete branco - imp",
+      "Número trocado - imp",
+      "Sem impressão - imp",
+      "Sujeira no inferior da sola - imp",
+      "Perda da injeção - imp",
+      "Ausência de verniz - imp",
+      "Aplicação basecolt - base",
+    ];
+
+    function updateHeader(){
+      const setor = document.getElementById('setor').value || '';
+      const resp = document.getElementById('resp').value || '';
+      const turno = document.getElementById('turno').value || '';
+      const data = document.getElementById('data').value;
+      const ramais = document.getElementById('ramais').value || '';
+      document.getElementById('out-setor').textContent = setor;
+      document.getElementById('out-resp').textContent = resp;
+      document.getElementById('out-turno').textContent = turno;
+      document.getElementById('out-data').textContent = data ? data.split('-').reverse().join('/') : '';
+      document.getElementById('out-ramais').textContent = ramais;
+      document.getElementById('now').textContent = new Date().toLocaleString();
+    }
+
+    function renderEditor(){
+      editor.innerHTML = "";
+      items.forEach((it, idx) => {
+        const row = document.createElement('div');
+        row.className = 'editor-row';
+        row.innerHTML = `
+          <input placeholder="Motivo" value="${it.motivo}">
+          <input placeholder="0" inputmode="numeric" value="${it.qtde}">
+          <textarea placeholder="Justificativa">${it.just}</textarea>
+          <button class="del" title="Remover">✕</button>
+        `;
+        const [m,q,j] = row.querySelectorAll('input,textarea');
+        m.oninput = ()=>{ it.motivo = m.value; renderSheet(); };
+        q.oninput = ()=>{ it.qtde = q.value; renderSheet(); };
+        j.oninput = ()=>{ it.just = j.value; renderSheet(); };
+        row.querySelector('.del').onclick = ()=>{ items.splice(idx,1); renderEditor(); renderSheet(); };
+        editor.appendChild(row);
+      });
+    }
+
+    function renderSheet(){
+      tbody.innerHTML = "";
+      let sum = 0;
+      items.forEach(it => {
+        const tr = document.createElement('tr');
+        const qt = parseFloat(String(it.qtde).replace(',','.'));
+        if (!isNaN(qt)) sum += qt;
+        tr.innerHTML = `
+          <td class="motivo"><span>${it.motivo || ''}</span></td>
+          <td class="qtde"><span>${it.qtde || ''}</span></td>
+          <td class="just"><span>${it.just || ''}</span></td>
+        `;
+        tbody.appendChild(tr);
+      });
+      document.getElementById('sum').textContent = sum || 0;
+      document.getElementById('total').textContent = sum || 0;
+    }
+
+    function addItem(motivo=''){
+      items.push({motivo, qtde:'', just:''});
+      renderEditor(); renderSheet();
+    }
+
+    document.getElementById('add').onclick = ()=> addItem('');
+    ['setor','resp','turno','data','ramais'].forEach(id=>document.getElementById(id).addEventListener('input', updateHeader));
+
+    document.getElementById('download').onclick = async ()=>{ await generate(false, true); };
+    document.getElementById('share').onclick = async ()=>{ await generate(true, false); };
+
+    async function generate(tryShare=true, forceDownload=false){
+      updateHeader();
+      renderSheet();
+      const node = document.getElementById('sheet');
+      try {
+        const blob = await htmlToImage.toBlob(node, {pixelRatio: 2, backgroundColor: '#ffffff'});
+        if (!blob) throw new Error('Falha ao gerar');
+        const url = URL.createObjectURL(blob);
+        document.getElementById('preview').src = url;
+
+        if (tryShare && navigator.canShare && navigator.canShare({ files: [new File([blob],'retrabalho.png',{type:'image/png'})] })) {
+          const file = new File([blob], `retrabalho-${Date.now()}.png`, { type: 'image/png' });
+          await navigator.share({ title:'Retrabalho', text:'Tabela de retrabalho', files:[file] });
+        } else if (forceDownload || !tryShare) {
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = `retrabalho-${Date.now()}.png`;
+          a.click();
+        }
+      } catch (e) {
+        alert('Não foi possível gerar/compartilhar a imagem. Tente o botão Baixar PNG.');
+        console.error(e);
+      }
+    }
+
+    // inicializa com motivos padrão
+    motivesDefault.forEach(m => addItem(m));
+    updateHeader();
+  </script>
+</body>
+</html>
