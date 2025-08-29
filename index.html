@@ -1,10 +1,9 @@
-
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Retrabalho v4 – Qtde 4 dígitos</title>
+  <title>Relatório de Retrabalhos e Perdas 2D</title>
   <style>
     :root{
       --bg:#f6f7f9; --card:#fff; --text:#111; --muted:#667085; --line:#E5E7EB;
@@ -51,7 +50,7 @@
 </head>
 <body>
   <div class="wrap">
-    <h1>Gerador de Tabela – Retrabalho (v4 – Qtde até 4 dígitos)</h1>
+    <h1>Relatório de Retrabalhos e Perdas 2D</h1>
 
     <div class="card grid" style="margin-bottom:12px;">
       <div class="grid g4">
@@ -86,7 +85,7 @@
     <div class="sheet" id="sheet">
       <div class="hdr">
         <div class="brand" id="out-setor">Grendene – Impressão Digital</div>
-        <small>Formulário de retrabalho</small>
+        <small>Relatório de retrabalhos e perdas 2D</small>
       </div>
       <div class="grid g4" style="margin:8px 0 10px">
         <div><small class="muted">Responsável:</small> <b id="out-resp"></b></div>
@@ -159,7 +158,7 @@
       document.getElementById('out-turno').textContent = turno;
       document.getElementById('out-data').textContent = data ? data.split('-').reverse().join('/') : '';
       document.getElementById('out-ramais').textContent = ramais;
-      document.getElementById('now').textContent = new Date().toLocaleString();
+      document.getElementById('now').textContent = new Date().toLocaleString('pt-BR');
     }
 
     function renderEditor(){
@@ -221,13 +220,13 @@
         const url = URL.createObjectURL(blob);
         document.getElementById('preview').src = url;
 
-        if (tryShare && navigator.canShare && navigator.canShare({ files: [new File([blob],'retrabalho.png',{type:'image/png'})] })) {
-          const file = new File([blob], `retrabalho-${Date.now()}.png`, { type: 'image/png' });
-          await navigator.share({ title:'Retrabalho', text:'Tabela de retrabalho', files:[file] });
+        if (tryShare && navigator.canShare && navigator.canShare({ files: [new File([blob],'relatorio-2d.png',{type:'image/png'})] })) {
+          const file = new File([blob], `relatorio-2d-${Date.now()}.png`, { type: 'image/png' });
+          await navigator.share({ title:'Relatório de Retrabalhos e Perdas 2D', text:'Relatório 2D (retrabalhos e perdas)', files:[file] });
         } else if (forceDownload || !tryShare) {
           const a = document.createElement('a');
           a.href = url;
-          a.download = `retrabalho-${Date.now()}.png`;
+          a.download = `relatorio-2d-${Date.now()}.png`;
           a.click();
         }
       } catch (e) {
