@@ -60,9 +60,7 @@ input, select, textarea{
   border:1px solid #d1d5db;
   font-size:14px;
 }
-textarea{
-  resize:none;
-}
+textarea{ resize:none; }
 button{
   border:none;
   border-radius:10px;
@@ -70,16 +68,11 @@ button{
   font-weight:bold;
   cursor:pointer;
 }
-.btn-add{
-  background:#e5e7eb;
-}
-.btn-main{
-  background:#000;
-  color:#fff;
-}
+.btn-add{ background:#e5e7eb; }
+.btn-main{ background:#000; color:#fff; }
+
 .row{
   display:grid;
-  /* Qtde. um pouco mais larga */
   grid-template-columns: 1.4fr 0.75fr 1.6fr 28px;
   gap:6px;
   margin-bottom:6px;
@@ -96,22 +89,54 @@ button{
   font-weight:bold;
   margin-top:6px;
 }
+
+/* -------- RELATÓRIO (ÁREA QUE VIRA FOTO) -------- */
+.report{
+  background:#fff;
+  border-radius:14px;
+  padding:14px;
+}
+.reportTop{
+  display:flex;
+  justify-content:space-between;
+  align-items:flex-start;
+  gap:12px;
+}
+.reportLeft{
+  font-weight:bold;
+  font-size:16px;
+  line-height:1.2;
+}
+.reportRight{
+  font-size:14px;
+  color:#6b7280;
+  text-align:right;
+  line-height:1.2;
+}
+.reportMeta{
+  display:grid;
+  grid-template-columns: 1fr 1fr;
+  gap:6px 10px;
+  font-size:14px;
+  margin-top:10px;
+}
+.reportMeta .lbl{ color:#6b7280; }
 table{
   width:100%;
   border-collapse:collapse;
   font-size:13px;
+  margin-top:10px;
 }
 th, td{
   border:1px solid #e5e7eb;
   padding:8px;
+  vertical-align:top;
 }
 th{
   background:#f9fafb;
   text-align:left;
 }
-tfoot td{
-  font-weight:bold;
-}
+tfoot td{ font-weight:bold; }
 .footer{
   font-size:12px;
   color:#6b7280;
@@ -123,15 +148,11 @@ tfoot td{
 <body>
 <div class="container">
 
-<!-- CABEÇALHO -->
+<!-- FORMULÁRIO (NÃO É A FOTO) -->
 <div class="card">
   <div class="header">
-    <div class="header-left">
-      Grendene –<br>Impressão Digital
-    </div>
-    <div class="header-right">
-      Relatório de retrabalhos e<br>perdas 2D
-    </div>
+    <div class="header-left">Grendene –<br>Impressão Digital</div>
+    <div class="header-right">Relatório de retrabalhos e<br>perdas 2D</div>
   </div>
 
   <div class="divider"></div>
@@ -157,45 +178,64 @@ tfoot td{
   </div>
 </div>
 
-<!-- BOTÃO -->
 <div class="card">
   <button class="btn-add" onclick="addLinha()">Adicionar linha</button>
 </div>
 
-<!-- EDITOR -->
 <div class="card" id="editor"></div>
 
 <div class="total">Total: <span id="total">0</span></div>
 
 <div class="card">
-  <button class="btn-main" onclick="gerar()">Gerar & Compartilhar</button>
+  <button class="btn-main" id="btnShare">Gerar & Compartilhar</button>
 </div>
 
-<!-- RELATÓRIO FINAL -->
+<!-- RELATÓRIO (ESSE É O QUE VIRA FOTO) -->
 <div class="card" id="relatorio" style="display:none;">
-  <table>
-    <thead>
-      <tr>
-        <th>Motivo</th>
-        <th>Qtde.</th>
-        <th>Justificativa</th>
-      </tr>
-    </thead>
-    <tbody id="tbody"></tbody>
-    <tfoot>
-      <tr>
-        <td>TOTAL</td>
-        <td id="totalFinal"></td>
-        <td></td>
-      </tr>
-    </tfoot>
-  </table>
-  <div class="footer">
-    Gerado em <span id="geradoEm"></span>
+  <div class="report" id="foto">
+    <div class="reportTop">
+      <div class="reportLeft">Grendene –<br>Impressão Digital</div>
+      <div class="reportRight">Relatório de retrabalhos e<br>perdas 2D</div>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- ✅ CABEÇALHO COMPLETO DENTRO DA FOTO -->
+    <div class="reportMeta">
+      <div><span class="lbl">Responsável:</span> <b id="r_responsavel"></b></div>
+      <div><span class="lbl">Turno:</span> <b id="r_turno"></b></div>
+      <div><span class="lbl">Data:</span> <b id="r_data"></b></div>
+      <div><span class="lbl">Ramais:</span> <b id="r_ramais"></b></div>
+    </div>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Motivo</th>
+          <th>Qtde.</th>
+          <th>Justificativa</th>
+        </tr>
+      </thead>
+      <tbody id="tbody"></tbody>
+      <tfoot>
+        <tr>
+          <td>TOTAL</td>
+          <td id="totalFinal"></td>
+          <td></td>
+        </tr>
+      </tfoot>
+    </table>
+
+    <div class="footer">
+      Gerado em <span id="geradoEm"></span>
+    </div>
   </div>
 </div>
 
 </div>
+
+<!-- html2canvas para gerar a imagem -->
+<script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
 
 <script>
 const MOTIVOS = [
@@ -247,15 +287,34 @@ function calcTotal(){
   totalEl.textContent = t;
 }
 
-function gerar(){
+function fmtDateBR(iso){
+  if(!iso) return "";
+  const [y,m,d] = iso.split("-");
+  return `${d}/${m}/${y}`;
+}
+
+// ✅ monta a tabela do relatório + cabeçalho completo dentro da foto
+function montarRelatorio(){
+  const responsavel = document.getElementById("responsavel").value || "";
+  const turno = document.getElementById("turno").value || "";
+  const dataISO = document.getElementById("data").value || "";
+  const ramais = document.getElementById("ramais").value || "";
+
+  document.getElementById("r_responsavel").textContent = responsavel;
+  document.getElementById("r_turno").textContent = turno;
+  document.getElementById("r_data").textContent = fmtDateBR(dataISO);
+  document.getElementById("r_ramais").textContent = ramais;
+
   const tbody = document.getElementById("tbody");
   tbody.innerHTML = "";
+
   let total = 0;
 
   editor.querySelectorAll(".row").forEach(r=>{
     const m = r.children[0].value;
     const q = Number(r.children[1].value)||0;
     const j = r.children[2].value;
+
     total += q;
     tbody.innerHTML += `<tr><td>${m}</td><td>${q}</td><td>${j}</td></tr>`;
   });
@@ -267,13 +326,57 @@ function gerar(){
   document.getElementById("relatorio").style.display = "block";
 }
 
-// Data automática (já preenchida, só clicar se quiser mudar)
+async function gerarImagemBlob(){
+  montarRelatorio();
+
+  const el = document.getElementById("foto");
+  const canvas = await html2canvas(el, {backgroundColor:"#fff", scale:2, useCORS:true});
+  const blob = await new Promise(res => canvas.toBlob(res, "image/png", 1));
+  return blob;
+}
+
+async function compartilhar(){
+  try{
+    const blob = await gerarImagemBlob();
+    const file = new File([blob], "relatorio.png", {type:"image/png"});
+
+    const texto =
+`Relatório de retrabalhos e perdas 2D
+Responsável: ${document.getElementById("responsavel").value || "-"}
+Turno: ${document.getElementById("turno").value || "-"}
+Data: ${fmtDateBR(document.getElementById("data").value) || "-"}
+Ramais: ${document.getElementById("ramais").value || "-"}`;
+
+    // ✅ Compartilhar com imagem (WhatsApp aparece na lista quando suportado)
+    if(navigator.canShare && navigator.canShare({files:[file]})){
+      await navigator.share({title:"Relatório 2D", text:texto, files:[file]});
+      return;
+    }
+
+    // Fallback: baixar a imagem
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "relatorio.png";
+    a.click();
+    URL.revokeObjectURL(url);
+
+    alert("Seu navegador não permitiu compartilhar com imagem. A foto foi baixada.");
+  }catch(e){
+    console.error(e);
+    alert("Não foi possível gerar/compartilhar a imagem. Tente novamente.");
+  }
+}
+
+// Data automática
 document.getElementById("data").value = new Date().toISOString().slice(0,10);
 
-// ✅ Linhas iniciais: TODAS (uma por motivo, na ordem)
+// ✅ linhas iniciais: todas (uma por motivo)
 (function init(){
   MOTIVOS.forEach(m => addLinha(m));
 })();
+
+document.getElementById("btnShare").addEventListener("click", compartilhar);
 </script>
 
 </body>
