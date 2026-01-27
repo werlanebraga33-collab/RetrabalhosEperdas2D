@@ -79,7 +79,8 @@ button{
 }
 .row{
   display:grid;
-  grid-template-columns: 1.4fr 0.6fr 1.6fr 28px;
+  /* Qtde. um pouco mais larga */
+  grid-template-columns: 1.4fr 0.75fr 1.6fr 28px;
   gap:6px;
   margin-bottom:6px;
   align-items:center;
@@ -215,12 +216,21 @@ const MOTIVOS = [
 const editor = document.getElementById("editor");
 const totalEl = document.getElementById("total");
 
-function addLinha(){
+function buildOptions(selected){
+  return MOTIVOS.map(m => {
+    const sel = (m === selected) ? "selected" : "";
+    return `<option ${sel}>${m}</option>`;
+  }).join("");
+}
+
+function addLinha(motivoSelecionado){
   const div = document.createElement("div");
   div.className = "row";
 
+  const motivo = motivoSelecionado || MOTIVOS[0];
+
   div.innerHTML = `
-    <select>${MOTIVOS.map(m=>`<option>${m}</option>`).join("")}</select>
+    <select>${buildOptions(motivo)}</select>
     <input type="number" min="0" value="0" oninput="calcTotal()">
     <textarea placeholder="Justificativa"></textarea>
     <div class="remove" onclick="this.parentElement.remove(); calcTotal()">×</div>
@@ -257,12 +267,13 @@ function gerar(){
   document.getElementById("relatorio").style.display = "block";
 }
 
-document.getElementById("data").value =
-  new Date().toISOString().slice(0,10);
+// Data automática (já preenchida, só clicar se quiser mudar)
+document.getElementById("data").value = new Date().toISOString().slice(0,10);
 
-// linhas iniciais
-addLinha();
-addLinha();
+// ✅ Linhas iniciais: TODAS (uma por motivo, na ordem)
+(function init(){
+  MOTIVOS.forEach(m => addLinha(m));
+})();
 </script>
 
 </body>
