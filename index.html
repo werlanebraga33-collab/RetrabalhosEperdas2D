@@ -31,42 +31,37 @@ body{
 .header-left{
   font-weight:bold;
   font-size:16px;
+  line-height:1.2;
 }
 .header-right{
   font-size:14px;
   color:#6b7280;
   text-align:right;
+  line-height:1.2;
 }
-.line{
+.divider{
   height:1px;
   background:#e5e7eb;
   margin:10px 0;
 }
-label{
-  font-size:13px;
-  color:#374151;
+.info{
+  display:grid;
+  grid-template-columns: 1fr 1fr;
+  gap:6px 10px;
+  font-size:14px;
+}
+.info span{
+  color:#6b7280;
 }
 input, select, textarea{
   width:100%;
   padding:8px;
   border-radius:8px;
   border:1px solid #d1d5db;
-  margin-top:4px;
   font-size:14px;
 }
-textarea{ resize:none; }
-.row{
-  display:grid;
-  grid-template-columns: 1.3fr 0.5fr 1.4fr 26px;
-  gap:6px;
-  margin-bottom:6px;
-  align-items:center;
-}
-.remove{
-  color:#dc2626;
-  font-size:20px;
-  text-align:center;
-  cursor:pointer;
+textarea{
+  resize:none;
 }
 button{
   border:none;
@@ -81,6 +76,19 @@ button{
 .btn-main{
   background:#000;
   color:#fff;
+}
+.row{
+  display:grid;
+  grid-template-columns: 1.4fr 0.6fr 1.6fr 28px;
+  gap:6px;
+  margin-bottom:6px;
+  align-items:center;
+}
+.remove{
+  color:#dc2626;
+  font-size:20px;
+  text-align:center;
+  cursor:pointer;
 }
 .total{
   text-align:right;
@@ -114,6 +122,7 @@ tfoot td{
 <body>
 <div class="container">
 
+<!-- CABEÇALHO -->
 <div class="card">
   <div class="header">
     <div class="header-left">
@@ -124,29 +133,35 @@ tfoot td{
     </div>
   </div>
 
-  <div class="line"></div>
+  <div class="divider"></div>
 
-  <label>Responsável</label>
-  <input id="responsavel">
+  <div class="info">
+    <div><span>Responsável:</span></div>
+    <div><input id="responsavel"></div>
 
-  <label>Turno</label>
-  <select id="turno">
-    <option>1º</option>
-    <option selected>2º</option>
-    <option>3º</option>
-  </select>
+    <div><span>Turno:</span></div>
+    <div>
+      <select id="turno">
+        <option>1º</option>
+        <option selected>2º</option>
+        <option>3º</option>
+      </select>
+    </div>
 
-  <label>Data</label>
-  <input type="date" id="data">
+    <div><span>Data:</span></div>
+    <div><input type="date" id="data"></div>
 
-  <label>Ramais</label>
-  <input id="ramais">
+    <div><span>Ramais:</span></div>
+    <div><input id="ramais"></div>
+  </div>
 </div>
 
+<!-- BOTÃO -->
 <div class="card">
   <button class="btn-add" onclick="addLinha()">Adicionar linha</button>
 </div>
 
+<!-- EDITOR -->
 <div class="card" id="editor"></div>
 
 <div class="total">Total: <span id="total">0</span></div>
@@ -155,6 +170,7 @@ tfoot td{
   <button class="btn-main" onclick="gerar()">Gerar & Compartilhar</button>
 </div>
 
+<!-- RELATÓRIO FINAL -->
 <div class="card" id="relatorio" style="display:none;">
   <table>
     <thead>
@@ -244,6 +260,7 @@ function gerar(){
 document.getElementById("data").value =
   new Date().toISOString().slice(0,10);
 
+// linhas iniciais
 addLinha();
 addLinha();
 </script>
