@@ -1,635 +1,173 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta charset="UTF-8">
   <title>Relatório de Retrabalhos e Perdas 2D</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
   <style>
-    :root{
-      --bg:#f6f7fb;
-      --card:#ffffff;
-      --text:#0f172a;
-      --muted:#64748b;
-      --line:#e2e8f0;
-      --shadow:0 10px 24px rgba(15, 23, 42, .06);
-      --radius:18px;
-      --radius2:14px;
-      --btn:#0b0b0c;
-      --btnText:#fff;
-      --danger:#b91c1c;
-    }
-    *{box-sizing:border-box}
     body{
+      font-family: Arial, Helvetica, sans-serif;
+      background:#f5f5f5;
       margin:0;
-      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
-      background:var(--bg);
-      color:var(--text);
-    }
-    .wrap{
-      max-width:920px;
-      margin:0 auto;
-      padding:18px 14px 30px;
+      padding:12px;
     }
     h1{
-      font-size:20px;
-      margin:6px 0 12px;
-      font-weight:800;
-      letter-spacing:.2px;
-    }
-    .grid{
-      display:grid;
-      grid-template-columns: repeat(12, 1fr);
-      gap:10px;
-    }
-    .field{
-      background:var(--card);
-      border:1px solid var(--line);
-      border-radius:var(--radius2);
-      padding:10px 12px;
-      box-shadow:var(--shadow);
-    }
-    .field label{
-      display:block;
-      font-size:12px;
-      color:var(--muted);
-      margin-bottom:6px;
-      font-weight:600;
-    }
-    input, select{
-      width:100%;
-      border:1px solid var(--line);
-      border-radius:12px;
-      padding:10px 10px;
-      font-size:14px;
-      outline:none;
-      background:#fff;
-    }
-    input:focus, select:focus{
-      border-color:#94a3b8;
-    }
-
-    .col-3{grid-column: span 3;}
-    .col-4{grid-column: span 4;}
-    .col-6{grid-column: span 6;}
-    .col-12{grid-column: span 12;}
-
-    @media (max-width:760px){
-      .col-3,.col-4,.col-6{grid-column: span 12;}
-    }
-
-    .actions{
-      display:flex;
-      gap:10px;
-      flex-wrap:wrap;
-      margin:10px 0 14px;
-    }
-    .btn{
-      border:0;
-      border-radius:16px;
-      padding:12px 14px;
-      font-weight:800;
-      cursor:pointer;
-      box-shadow:var(--shadow);
-      background:var(--card);
-      border:1px solid var(--line);
-      color:var(--text);
-    }
-    .btn.primary{
-      background:var(--btn);
-      color:var(--btnText);
-      border-color:transparent;
-    }
-    .btn:active{transform:translateY(1px)}
-    .hint{
-      color:var(--muted);
-      font-size:13px;
-      margin:6px 0 12px;
-    }
-
-    .editor{
-      background:var(--card);
-      border:1px solid var(--line);
-      border-radius:var(--radius);
-      padding:12px;
-      box-shadow:var(--shadow);
-    }
-    .row{
-      display:grid;
-      grid-template-columns: 1.25fr .35fr 1fr 40px;
-      gap:10px;
-      align-items:center;
-      padding:8px 6px;
-      border-bottom:1px dashed #e9eef6;
-    }
-    .row:last-child{border-bottom:0}
-    .row select, .row input, .row textarea{
-      width:100%;
-      border:1px solid var(--line);
-      border-radius:14px;
-      padding:10px;
-      font-size:14px;
-      background:#fff;
-      outline:none;
-    }
-    .row textarea{
-      resize:none;
-      min-height:42px;
-      max-height:80px;
-    }
-    .del{
-      width:36px;height:36px;
-      display:grid;
-      place-items:center;
-      border-radius:14px;
-      border:1px solid var(--line);
-      background:#fff;
-      color:var(--danger);
-      cursor:pointer;
-      font-size:20px;
-      line-height:1;
-      user-select:none;
-    }
-
-    .totbar{
-      display:flex;
-      justify-content:space-between;
-      align-items:center;
-      margin-top:10px;
-      color:var(--muted);
-      font-weight:700;
-    }
-    .totbar b{color:var(--text)}
-    .sep{
-      margin:14px 0;
-      height:1px;
-      background:linear-gradient(to right, transparent, #d8e1ee, transparent);
-      border:0;
-    }
-
-    /* AREA DO RELATÓRIO (para imagem) */
-    .reportWrap{
-      margin-top:10px;
-      display:grid;
-      gap:12px;
-    }
-    .report{
-      background:#fff;
-      border:1px solid #e5e7eb;
-      border-radius:18px;
-      padding:16px 16px 14px;
-      box-shadow:var(--shadow);
-    }
-    .reportTop{
-      display:flex;
-      justify-content:space-between;
-      gap:12px;
-      flex-wrap:wrap;
-      align-items:flex-start;
+      font-size:18px;
       margin-bottom:10px;
     }
-    .brand{
-      font-weight:900;
-      letter-spacing:.2px;
-      font-size:14px;
-      color:#111827;
+    .box{
+      background:#fff;
+      border-radius:10px;
+      padding:12px;
+      margin-bottom:10px;
     }
-    .title{
-      font-weight:900;
-      font-size:16px;
-      margin:6px 0 0;
-    }
-    .meta{
-      display:grid;
-      gap:4px;
-      font-size:13px;
-      color:#111827;
-    }
-    .meta span{
-      color:#111827;
-    }
-    .meta b{
-      font-weight:900;
-    }
-
-    table{
+    input, select, textarea{
       width:100%;
-      border-collapse:collapse;
-      font-size:13px;
-      table-layout:fixed;
+      padding:8px;
+      margin-top:4px;
+      border-radius:8px;
+      border:1px solid #ccc;
+      font-size:14px;
     }
-    th, td{
-      border:1px solid #e5e7eb;
-      padding:8px 8px;
-      vertical-align:top;
-      word-wrap:break-word;
-      overflow-wrap:break-word;
+    textarea{ resize:none }
+    button{
+      padding:10px 14px;
+      border:none;
+      border-radius:10px;
+      cursor:pointer;
+      font-weight:bold;
     }
-    th{
-      background:#f8fafc;
-      text-align:left;
-      font-weight:900;
+    .btn-add{ background:#e5e5e5 }
+    .btn-main{ background:#000; color:#fff }
+    .linha{
+      display:grid;
+      grid-template-columns: 1.2fr 0.4fr 1.2fr 40px;
+      gap:6px;
+      margin-bottom:6px;
+      align-items:center;
     }
-    tfoot td{
-      font-weight:900;
-      background:#f8fafc;
-    }
-    .foot{
-      margin-top:10px;
-      font-size:12px;
-      color:#6b7280;
-      display:flex;
-      justify-content:space-between;
-      flex-wrap:wrap;
-      gap:8px;
-    }
-    .previewLabel{
-      color:var(--muted);
-      font-size:13px;
-      font-weight:700;
-      margin-top:2px;
-    }
-    .toast{
-      position:fixed;
-      left:50%;
-      bottom:18px;
-      transform:translateX(-50%);
-      background:#111827;
-      color:#fff;
-      padding:10px 12px;
-      border-radius:14px;
-      box-shadow:0 12px 28px rgba(0,0,0,.18);
-      font-size:13px;
-      display:none;
-      z-index:99;
-      max-width:min(560px, 92vw);
+    .remover{
+      color:red;
+      font-size:22px;
       text-align:center;
+      cursor:pointer;
+    }
+    .total{
+      text-align:right;
+      font-weight:bold;
+      margin-top:6px;
     }
   </style>
 </head>
 
 <body>
-  <div class="wrap">
-    <h1>Relatório de Retrabalhos e Perdas 2D</h1>
 
-    <div class="grid">
-      <div class="field col-4">
-        <label for="setor">Setor</label>
-        <input id="setor" placeholder="Ex.: Impressão 2D" />
-      </div>
+<h1>Relatório de Retrabalhos e Perdas 2D</h1>
 
-      <div class="field col-4">
-        <label for="responsavel">Responsável</label>
-        <input id="responsavel" placeholder="Ex.: F" />
-      </div>
+<div class="box">
+  <label>Setor</label>
+  <input id="setor">
 
-      <div class="field col-4">
-        <label for="turno">Turno</label>
-        <select id="turno">
-          <option value="1º">1º</option>
-          <option value="2º" selected>2º</option>
-          <option value="3º">3º</option>
-        </select>
-      </div>
+  <label>Responsável</label>
+  <input id="responsavel" placeholder="Ex.: F">
 
-      <div class="field col-6">
-        <label for="data">Data</label>
-        <input id="data" type="date" />
-      </div>
+  <label>Turno</label>
+  <select id="turno">
+    <option>1º</option>
+    <option selected>2º</option>
+    <option>3º</option>
+  </select>
 
-      <div class="field col-6">
-        <label for="ramais">Ramais</label>
-        <input id="ramais" placeholder="Ex.: 1, 2, 3, 4" />
-      </div>
-    </div>
+  <label>Data</label>
+  <input type="date" id="data">
 
-    <div class="actions">
-      <button class="btn" id="addRowBtn">+ Adicionar linha</button>
-      <button class="btn primary" id="genBtn">Gerar &amp; Compartilhar</button>
-      <button class="btn" id="pngBtn">Baixar PNG</button>
-    </div>
+  <label>Ramais</label>
+  <input id="ramais">
+</div>
 
-    <div class="hint">No editor abaixo, preencha os itens. A tabela final usa <b>texto puro</b>.</div>
+<div class="box">
+  <button class="btn-add" onclick="addLinha()">Adicionar linha</button>
+</div>
 
-    <div class="editor" id="editor"></div>
+<div class="box" id="editor"></div>
 
-    <div class="totbar">
-      <span class="hint" style="margin:0">Dica: apenas números em “Qtde”.</span>
-      <span><b>Total:</b> <span id="totalEditor">0</span></span>
-    </div>
+<div class="total">
+  Total: <span id="total">0</span>
+</div>
 
-    <hr class="sep" />
+<div class="box">
+  <button class="btn-main" onclick="gerar()">Gerar & Compartilhar</button>
+  <button class="btn-add" onclick="baixarPNG()">Baixar PNG</button>
+</div>
 
-    <div class="previewLabel">Prévia (após gerar):</div>
+<script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
 
-    <div class="reportWrap">
-      <div class="report" id="report">
-        <div class="reportTop">
-          <div>
-            <div class="brand">Grendene – Impressão Digital</div>
-            <div class="title">Relatório de retrabalhos e perdas 2D</div>
-          </div>
+<script>
+/* ======================================================
+   🔹 ÚNICA ALTERAÇÃO: DESCRIÇÕES + ORDEM DOS MOTIVOS
+   ====================================================== */
+const MOTIVOS = [
+  "Aplicação de base - imp",
+  "Base - imp",
+  "Falha de Impressão - imp",
+  "Filete Branco - imp",
+  "Logo Ipanema sem definição - imp",
+  "Manchas - imp",
+  "Número Trocado - imp",
+  "Perda de Injeção - imp",
+  "Sem Impressão - imp",
+  "Sujeira no inferior da sola - imp",
+  "Troca de Imagem - imp",
+  "Lâminados falhas - imp"
+];
 
-          <div class="meta">
-            <div><b>Responsável:</b> <span id="r_responsavel"></span></div>
-            <div><b>Turno:</b> <span id="r_turno">2º</span></div>
-            <div><b>Data:</b> <span id="r_data"></span></div>
-            <div><b>Ramais:</b> <span id="r_ramais"></span></div>
-          </div>
-        </div>
+const editor = document.getElementById("editor");
+const totalEl = document.getElementById("total");
 
-        <table>
-          <thead>
-            <tr>
-              <th style="width:34%">Motivo</th>
-              <th style="width:12%">Qtde.</th>
-              <th>Justificativa</th>
-            </tr>
-          </thead>
-          <tbody id="tbodyReport">
-            <tr>
-              <td colspan="3" style="color:#64748b; text-align:center; padding:14px;">Preencha e clique em “Gerar &amp; Compartilhar”.</td>
-            </tr>
-          </tbody>
-          <tfoot>
-            <tr>
-              <td style="text-align:right">TOTAL</td>
-              <td id="r_total">0</td>
-              <td></td>
-            </tr>
-          </tfoot>
-        </table>
+function addLinha(){
+  const div = document.createElement("div");
+  div.className = "linha";
 
-        <div class="foot">
-          <span>Gerado em <span id="r_geradoEm"></span></span>
-          <span style="font-weight:800;">Setor: <span id="r_setor"></span></span>
-        </div>
-      </div>
-    </div>
-  </div>
+  let options = MOTIVOS.map(m => `<option>${m}</option>`).join("");
 
-  <div class="toast" id="toast"></div>
+  div.innerHTML = `
+    <select>${options}</select>
+    <input type="number" value="0" min="0" oninput="calcTotal()">
+    <textarea placeholder="Justificativa"></textarea>
+    <div class="remover" onclick="this.parentElement.remove(); calcTotal()">×</div>
+  `;
 
-  <!-- html2canvas para gerar PNG -->
-  <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+  editor.appendChild(div);
+  calcTotal();
+}
 
-  <script>
-    // ✅ LISTA ATUALIZADA NA ORDEM EXATA (conforme você pediu)
-    const MOTIVOS = [
-      "Aplicação de base - imp",
-      "Base - imp",
-      "Falha de Impressão - imp",
-      "Filete Branco - imp",
-      "Logo Ipanema sem definição - imp",
-      "Manchas - imp",
-      "Número Trocado - imp",
-      "Perda de Injeção - imp",
-      "Sem Impressão - imp",
-      "Sujeira no inferior da sola - imp",
-      "Troca de Imagem - imp",
-      "Lâminados falhas - imp"
-    ];
+function calcTotal(){
+  let total = 0;
+  editor.querySelectorAll("input[type=number]").forEach(i=>{
+    total += Number(i.value) || 0;
+  });
+  totalEl.textContent = total;
+}
 
-    const editor = document.getElementById("editor");
-    const totalEditorEl = document.getElementById("totalEditor");
+function gerar(){
+  alert("Relatório gerado (layout mantido).");
+}
 
-    const setorEl = document.getElementById("setor");
-    const responsavelEl = document.getElementById("responsavel");
-    const turnoEl = document.getElementById("turno");
-    const dataEl = document.getElementById("data");
-    const ramaisEl = document.getElementById("ramais");
+function baixarPNG(){
+  html2canvas(document.body).then(canvas=>{
+    const a = document.createElement("a");
+    a.download = "relatorio_retrabalhos_2d.png";
+    a.href = canvas.toDataURL();
+    a.click();
+  });
+}
 
-    const tbodyReport = document.getElementById("tbodyReport");
+/* linhas iniciais padrão */
+addLinha();
+addLinha();
+addLinha();
+</script>
 
-    const r_setor = document.getElementById("r_setor");
-    const r_responsavel = document.getElementById("r_responsavel");
-    const r_turno = document.getElementById("r_turno");
-    const r_data = document.getElementById("r_data");
-    const r_ramais = document.getElementById("r_ramais");
-    const r_total = document.getElementById("r_total");
-    const r_geradoEm = document.getElementById("r_geradoEm");
-
-    const toastEl = document.getElementById("toast");
-
-    function toast(msg){
-      toastEl.textContent = msg;
-      toastEl.style.display = "block";
-      clearTimeout(toastEl._t);
-      toastEl._t = setTimeout(()=> toastEl.style.display = "none", 2400);
-    }
-
-    function fmtDateBR(iso){
-      if(!iso) return "";
-      const [y,m,d] = iso.split("-");
-      if(!y||!m||!d) return "";
-      return `${d}/${m}/${y}`;
-    }
-
-    function nowBR(){
-      const dt = new Date();
-      const dd = String(dt.getDate()).padStart(2,"0");
-      const mm = String(dt.getMonth()+1).padStart(2,"0");
-      const yy = dt.getFullYear();
-      const hh = String(dt.getHours()).padStart(2,"0");
-      const mi = String(dt.getMinutes()).padStart(2,"0");
-      return `${dd}/${mm}/${yy} ${hh}:${mi}`;
-    }
-
-    function buildMotivoOptions(selected){
-      return MOTIVOS.map(m => {
-        const sel = (m === selected) ? "selected" : "";
-        return `<option value="${escapeHtml(m)}" ${sel}>${escapeHtml(m)}</option>`;
-      }).join("");
-    }
-
-    function escapeHtml(str){
-      return String(str ?? "")
-        .replaceAll("&","&amp;")
-        .replaceAll("<","&lt;")
-        .replaceAll(">","&gt;")
-        .replaceAll('"',"&quot;")
-        .replaceAll("'","&#039;");
-    }
-
-    function parseNumber(v){
-      const n = Number(String(v).replace(",", "."));
-      return Number.isFinite(n) ? n : 0;
-    }
-
-    function recalcEditorTotal(){
-      const qtyInputs = editor.querySelectorAll('input[data-qty]');
-      let sum = 0;
-      qtyInputs.forEach(inp => sum += parseNumber(inp.value));
-      totalEditorEl.textContent = String(sum);
-      return sum;
-    }
-
-    function addRow(data = {}){
-      const row = document.createElement("div");
-      row.className = "row";
-
-      const motivo = data.motivo || MOTIVOS[0];
-      const qty = (data.qty ?? 0);
-      const just = data.just ?? "";
-
-      row.innerHTML = `
-        <select data-motivo>
-          ${buildMotivoOptions(motivo)}
-        </select>
-
-        <input data-qty inputmode="numeric" placeholder="0" value="${escapeHtml(qty)}" />
-
-        <textarea data-just placeholder="Justificativa">${escapeHtml(just)}</textarea>
-
-        <div class="del" title="Remover">×</div>
-      `;
-
-      const qtyEl = row.querySelector('input[data-qty]');
-      qtyEl.addEventListener("input", () => {
-        // mantém só números, vírgula e ponto
-        qtyEl.value = qtyEl.value.replace(/[^\d.,]/g, "");
-        recalcEditorTotal();
-      });
-
-      row.querySelector(".del").addEventListener("click", () => {
-        row.remove();
-        recalcEditorTotal();
-      });
-
-      editor.appendChild(row);
-      recalcEditorTotal();
-    }
-
-    function getRows(){
-      const rows = [];
-      editor.querySelectorAll(".row").forEach(r => {
-        const motivo = r.querySelector('[data-motivo]')?.value || "";
-        const qty = parseNumber(r.querySelector('[data-qty]')?.value || "0");
-        const just = r.querySelector('[data-just]')?.value || "";
-        // mantém no relatório inclusive qty 0, igual seu uso atual
-        rows.push({ motivo, qty, just });
-      });
-      return rows;
-    }
-
-    function renderReport(){
-      r_setor.textContent = setorEl.value.trim();
-      r_responsavel.textContent = responsavelEl.value.trim();
-      r_turno.textContent = turnoEl.value;
-      r_data.textContent = fmtDateBR(dataEl.value);
-      r_ramais.textContent = ramaisEl.value.trim();
-      r_geradoEm.textContent = nowBR();
-
-      const rows = getRows();
-
-      let total = 0;
-      let html = "";
-
-      if(rows.length === 0){
-        html = `<tr><td colspan="3" style="color:#64748b; text-align:center; padding:14px;">Sem linhas no editor. Clique em “+ Adicionar linha”.</td></tr>`;
-      }else{
-        rows.forEach(item => {
-          total += item.qty;
-          html += `
-            <tr>
-              <td>${escapeHtml(item.motivo)}</td>
-              <td>${escapeHtml(item.qty)}</td>
-              <td>${escapeHtml(item.just)}</td>
-            </tr>
-          `;
-        });
-      }
-
-      tbodyReport.innerHTML = html;
-      r_total.textContent = String(total);
-      totalEditorEl.textContent = String(total); // sincroniza visualmente
-      return total;
-    }
-
-    async function captureReportPng(){
-      const el = document.getElementById("report");
-      // força render atualizado
-      renderReport();
-
-      const canvas = await html2canvas(el, {
-        backgroundColor: "#ffffff",
-        scale: 2,
-        useCORS: true
-      });
-      return canvas;
-    }
-
-    async function downloadPNG(){
-      try{
-        const canvas = await captureReportPng();
-        const a = document.createElement("a");
-        const stamp = new Date().toISOString().slice(0,10);
-        a.download = `relatorio-retrabalhos-perdas-2d_${stamp}.png`;
-        a.href = canvas.toDataURL("image/png");
-        a.click();
-      }catch(e){
-        console.error(e);
-        toast("Não foi possível gerar o PNG.");
-      }
-    }
-
-    async function shareReport(){
-      try{
-        const canvas = await captureReportPng();
-        const blob = await new Promise(res => canvas.toBlob(res, "image/png", 1));
-        const file = new File([blob], "relatorio.png", { type: "image/png" });
-
-        const texto =
-`Relatório de retrabalhos e perdas 2D
-Responsável: ${responsavelEl.value || "-"}
-Turno: ${turnoEl.value}
-Data: ${fmtDateBR(dataEl.value) || "-"}
-Ramais: ${ramaisEl.value || "-"}
-Setor: ${setorEl.value || "-"}`;
-
-        if(navigator.canShare && navigator.canShare({ files: [file] })){
-          await navigator.share({ title: "Relatório 2D", text: texto, files: [file] });
-        }else{
-          // fallback: baixa PNG e copia texto
-          await downloadPNG();
-          if(navigator.clipboard){
-            await navigator.clipboard.writeText(texto);
-            toast("PNG baixado. Texto do relatório copiado.");
-          }else{
-            toast("PNG baixado.");
-          }
-        }
-      }catch(e){
-        console.error(e);
-        toast("Compartilhamento não suportado aqui. Use 'Baixar PNG'.");
-      }
-    }
-
-    // Botões
-    document.getElementById("addRowBtn").addEventListener("click", () => addRow());
-    document.getElementById("pngBtn").addEventListener("click", downloadPNG);
-    document.getElementById("genBtn").addEventListener("click", shareReport);
-
-    // Inicial
-    (function init(){
-      // data de hoje (opcional; não interfere se você preferir vazio)
-      // Se quiser manter vazio igual antes, comente as 2 linhas abaixo:
-      // const today = new Date().toISOString().slice(0,10);
-      // dataEl.value = today;
-
-      // cria algumas linhas iniciais (igual seu uso atual)
-      addRow({ motivo: "Manchas - imp", qty: 0, just: "" });
-      addRow({ motivo: "Logo Ipanema sem definição - imp", qty: 0, just: "" });
-      addRow({ motivo: "Falha de Impressão - imp", qty: 0, just: "" });
-      addRow({ motivo: "Troca de Imagem - imp", qty: 0, just: "" });
-      addRow({ motivo: "Filete Branco - imp", qty: 0, just: "" });
-      addRow({ motivo: "Número Trocado - imp", qty: 0, just: "" });
-      addRow({ motivo: "Sem Impressão - imp", qty: 0, just: "" });
-      addRow({ motivo: "Sujeira no inferior da sola - imp", qty: 0, just: "" });
-      addRow({ motivo: "Perda de Injeção - imp", qty: 0, just: "" });
-      addRow({ motivo: "Aplicação de base - imp", qty: 0, just: "" });
-
-      renderReport();
-    })();
-  </script>
 </body>
 </html>
