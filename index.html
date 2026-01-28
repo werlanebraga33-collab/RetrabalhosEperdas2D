@@ -44,15 +44,25 @@ body{
   background:#e5e7eb;
   margin:10px 0;
 }
+
+/* FORM INFO */
 .info{
   display:grid;
-  grid-template-columns: 1fr 1fr;
-  gap:6px 10px;
+  grid-template-columns: auto 1fr;
+  gap:8px 10px;
   font-size:14px;
+  align-items:center;
 }
 .info span{
   color:#6b7280;
+  white-space:nowrap;
 }
+.info input,
+.info select{
+  width:100%;
+}
+
+/* EDITOR */
 input, select, textarea{
   width:100%;
   padding:8px;
@@ -60,9 +70,8 @@ input, select, textarea{
   border:1px solid #d1d5db;
   font-size:14px;
 }
-textarea{
-  resize:none;
-}
+textarea{ resize:none; }
+
 button{
   border:none;
   border-radius:10px;
@@ -70,15 +79,9 @@ button{
   font-weight:bold;
   cursor:pointer;
 }
-.btn-add{
-  background:#e5e7eb;
-}
-.btn-main{
-  background:#000;
-  color:#fff;
-}
+.btn-add{ background:#e5e7eb; }
+.btn-main{ background:#000; color:#fff; }
 
-/* editor */
 .row{
   display:grid;
   grid-template-columns: 1.6fr 0.8fr 1.8fr 28px;
@@ -95,13 +98,14 @@ button{
   text-align:center;
   cursor:pointer;
 }
+
 .total{
   text-align:right;
   font-weight:bold;
   margin-top:6px;
 }
 
-/* relatório (foto) */
+/* RELATÓRIO (FOTO) */
 .report{
   background:#fff;
   border-radius:14px;
@@ -114,14 +118,17 @@ button{
 }
 .reportMeta{
   display:grid;
-  grid-template-columns: 1fr 1fr;
-  gap:6px 10px;
+  grid-template-columns: auto 1fr;
+  gap:8px 10px;
   font-size:14px;
   margin-top:10px;
+  align-items:center;
 }
 .reportMeta span{
   color:#6b7280;
+  white-space:nowrap;
 }
+
 table{
   width:100%;
   border-collapse:collapse;
@@ -137,9 +144,8 @@ th{
   background:#f9fafb;
   text-align:left;
 }
-tfoot td{
-  font-weight:bold;
-}
+tfoot td{ font-weight:bold; }
+
 .footer{
   font-size:12px;
   color:#6b7280;
@@ -165,32 +171,24 @@ tfoot td{
   <div class="divider"></div>
 
   <div class="info">
-    <div><span>Responsável:</span></div>
-    <div><input id="responsavel"></div>
+    <span>Responsável:</span>
+    <input id="responsavel">
 
-    <div><span>Turno:</span></div>
-    <div>
-      <select id="turno">
-        <option>1º</option>
-        <option selected>2º</option>
-        <option>3º</option>
-      </select>
-    </div>
+    <span>Turno:</span>
+    <select id="turno">
+      <option>1º</option>
+      <option selected>2º</option>
+      <option>3º</option>
+    </select>
 
-    <div><span>Data:</span></div>
-    <div><input type="date" id="data"></div>
+    <span>Data:</span>
+    <input type="date" id="data">
 
-    <div><span>Ramais:</span></div>
-    <div>
-      <select id="ramais" multiple>
-        <option>1</option>
-        <option>2</option>
-        <option>3</option>
-        <option>4</option>
-        <option>5</option>
-        <option>6</option>
-      </select>
-    </div>
+    <span>Ramais:</span>
+    <select id="ramais" multiple>
+      <option>1</option><option>2</option><option>3</option>
+      <option>4</option><option>5</option><option>6</option>
+    </select>
   </div>
 </div>
 
@@ -221,10 +219,10 @@ tfoot td{
     <div class="divider"></div>
 
     <div class="reportMeta">
-      <div><span>Responsável:</span> <b id="r_responsavel"></b></div>
-      <div><span>Turno:</span> <b id="r_turno"></b></div>
-      <div><span>Data:</span> <b id="r_data"></b></div>
-      <div><span>Ramais:</span> <b id="r_ramais"></b></div>
+      <span>Responsável:</span><b id="r_responsavel"></b>
+      <span>Turno:</span><b id="r_turno"></b>
+      <span>Data:</span><b id="r_data"></b>
+      <span>Ramais:</span><b id="r_ramais"></b>
     </div>
 
     <table>
@@ -289,7 +287,7 @@ function addLinha(motivo){
 }
 
 function addLinhaExtra(){
-  addLinha("Outro");
+  addLinha(" ");
 }
 
 function calcTotal(){
@@ -343,7 +341,6 @@ function montarRelatorio(){
 
 async function compartilhar(){
   montarRelatorio();
-
   const el = document.getElementById("foto");
   const canvas = await html2canvas(el,{backgroundColor:"#fff",scale:2});
   const blob = await new Promise(r=>canvas.toBlob(r,"image/png",1));
@@ -363,7 +360,7 @@ async function compartilhar(){
 document.getElementById("data").value =
   new Date().toISOString().slice(0,10);
 
-// linhas iniciais (todas)
+// linhas iniciais
 (function init(){
   MOTIVOS.forEach(m=>addLinha(m));
 })();
