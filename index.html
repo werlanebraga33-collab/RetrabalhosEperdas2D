@@ -57,12 +57,6 @@ body{
   color:#6b7280;
   white-space:nowrap;
 }
-.info input,
-.info select{
-  width:100%;
-}
-
-/* EDITOR */
 input, select, textarea{
   width:100%;
   padding:8px;
@@ -72,6 +66,13 @@ input, select, textarea{
 }
 textarea{ resize:none; }
 
+/* ✅ Ramais menor/largura controlada */
+#ramais{
+  width:150px;          /* mais estreito */
+  max-width:150px;
+}
+
+/* botões */
 button{
   border:none;
   border-radius:10px;
@@ -82,6 +83,7 @@ button{
 .btn-add{ background:#e5e7eb; }
 .btn-main{ background:#000; color:#fff; }
 
+/* EDITOR */
 .row{
   display:grid;
   grid-template-columns: 1.6fr 0.8fr 1.8fr 28px;
@@ -91,6 +93,12 @@ button{
 }
 .row .motivo{
   font-size:14px;
+
+  /* ✅ padronizar altura visual (evitar linhas gigantes) */
+  line-height:1.2;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
 }
 .remove{
   color:#dc2626;
@@ -98,7 +106,6 @@ button{
   text-align:center;
   cursor:pointer;
 }
-
 .total{
   text-align:right;
   font-weight:bold;
@@ -134,16 +141,34 @@ table{
   border-collapse:collapse;
   font-size:13px;
   margin-top:10px;
+  table-layout:fixed; /* ✅ ajuda a padronizar */
 }
 th, td{
   border:1px solid #e5e7eb;
   padding:8px;
-  vertical-align:top;
+  vertical-align:middle; /* ✅ altura mais padrão */
 }
 th{
   background:#f9fafb;
   text-align:left;
 }
+
+/* ✅ Motivo não estourar e não criar linhas muito altas */
+td:nth-child(1){
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+
+/* ✅ Colunas com largura melhor */
+th:nth-child(2), td:nth-child(2){
+  width:64px;
+  text-align:center;
+}
+th:nth-child(3), td:nth-child(3){
+  width:44%;
+}
+
 tfoot td{ font-weight:bold; }
 
 .footer{
@@ -277,7 +302,7 @@ function addLinha(motivo){
   div.className = "row";
 
   div.innerHTML = `
-    <div class="motivo">${motivo}</div>
+    <div class="motivo" title="${motivo}">${motivo}</div>
     <input type="number" min="0" value="0" oninput="calcTotal()">
     <textarea placeholder="Justificativa"></textarea>
     <div class="remove" onclick="this.parentElement.remove(); calcTotal()">×</div>
@@ -286,6 +311,7 @@ function addLinha(motivo){
   calcTotal();
 }
 
+/* linha extra (se precisar mesmo) */
 function addLinhaExtra(){
   addLinha(" ");
 }
@@ -324,12 +350,18 @@ function montarRelatorio(){
   tbody.innerHTML = "";
 
   let total = 0;
+
+  // ✅ NÃO adiciona linha vazia no final: só vai as linhas que existem
   editor.querySelectorAll(".row").forEach(r=>{
-    const m = r.children[0].textContent;
+    const m = (r.children[0].textContent || "").trim();
     const q = Number(r.children[1].value)||0;
-    const j = r.children[2].value;
+    const j = r.children[2].value || "";
+
+    // ✅ ignora linhas sem motivo (caso alguém adicione " " )
+    if(!m) return;
+
     total += q;
-    tbody.innerHTML += `<tr><td>${m}</td><td>${q}</td><td>${j}</td></tr>`;
+    tbody.innerHTML += `<tr><td title="${m}">${m}</td><td>${q}</td><td>${j}</td></tr>`;
   });
 
   document.getElementById("totalFinal").textContent = total;
@@ -341,6 +373,7 @@ function montarRelatorio(){
 
 async function compartilhar(){
   montarRelatorio();
+
   const el = document.getElementById("foto");
   const canvas = await html2canvas(el,{backgroundColor:"#fff",scale:2});
   const blob = await new Promise(r=>canvas.toBlob(r,"image/png",1));
