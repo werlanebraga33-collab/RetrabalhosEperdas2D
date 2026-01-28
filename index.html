@@ -60,7 +60,9 @@ input, select, textarea{
   border:1px solid #d1d5db;
   font-size:14px;
 }
-textarea{ resize:none; }
+textarea{
+  resize:none;
+}
 button{
   border:none;
   border-radius:10px;
@@ -68,15 +70,24 @@ button{
   font-weight:bold;
   cursor:pointer;
 }
-.btn-add{ background:#e5e7eb; }
-.btn-main{ background:#000; color:#fff; }
+.btn-add{
+  background:#e5e7eb;
+}
+.btn-main{
+  background:#000;
+  color:#fff;
+}
 
+/* editor */
 .row{
   display:grid;
-  grid-template-columns: 1.4fr 0.75fr 1.6fr 28px;
+  grid-template-columns: 1.6fr 0.8fr 1.8fr 28px;
   gap:6px;
   margin-bottom:6px;
   align-items:center;
+}
+.row .motivo{
+  font-size:14px;
 }
 .remove{
   color:#dc2626;
@@ -90,7 +101,7 @@ button{
   margin-top:6px;
 }
 
-/* -------- RELATÓRIO (ÁREA QUE VIRA FOTO) -------- */
+/* relatório (foto) */
 .report{
   background:#fff;
   border-radius:14px;
@@ -100,18 +111,6 @@ button{
   display:flex;
   justify-content:space-between;
   align-items:flex-start;
-  gap:12px;
-}
-.reportLeft{
-  font-weight:bold;
-  font-size:16px;
-  line-height:1.2;
-}
-.reportRight{
-  font-size:14px;
-  color:#6b7280;
-  text-align:right;
-  line-height:1.2;
 }
 .reportMeta{
   display:grid;
@@ -120,7 +119,9 @@ button{
   font-size:14px;
   margin-top:10px;
 }
-.reportMeta .lbl{ color:#6b7280; }
+.reportMeta span{
+  color:#6b7280;
+}
 table{
   width:100%;
   border-collapse:collapse;
@@ -136,7 +137,9 @@ th{
   background:#f9fafb;
   text-align:left;
 }
-tfoot td{ font-weight:bold; }
+tfoot td{
+  font-weight:bold;
+}
 .footer{
   font-size:12px;
   color:#6b7280;
@@ -148,11 +151,15 @@ tfoot td{ font-weight:bold; }
 <body>
 <div class="container">
 
-<!-- FORMULÁRIO (NÃO É A FOTO) -->
+<!-- FORMULÁRIO -->
 <div class="card">
   <div class="header">
-    <div class="header-left">Grendene –<br>Impressão Digital</div>
-    <div class="header-right">Relatório de retrabalhos e<br>perdas 2D</div>
+    <div class="header-left">
+      Grendene –<br>Impressão Digital
+    </div>
+    <div class="header-right">
+      Relatório de retrabalhos e<br>perdas 2D
+    </div>
   </div>
 
   <div class="divider"></div>
@@ -174,38 +181,50 @@ tfoot td{ font-weight:bold; }
     <div><input type="date" id="data"></div>
 
     <div><span>Ramais:</span></div>
-    <div><input id="ramais"></div>
+    <div>
+      <select id="ramais" multiple>
+        <option>1</option>
+        <option>2</option>
+        <option>3</option>
+        <option>4</option>
+        <option>5</option>
+        <option>6</option>
+      </select>
+    </div>
   </div>
 </div>
 
+<!-- BOTÃO -->
 <div class="card">
-  <button class="btn-add" onclick="addLinha()">Adicionar linha</button>
+  <button class="btn-add" onclick="addLinhaExtra()">Adicionar linha</button>
 </div>
 
+<!-- EDITOR -->
 <div class="card" id="editor"></div>
 
 <div class="total">Total: <span id="total">0</span></div>
 
 <div class="card">
-  <button class="btn-main" id="btnShare">Gerar & Compartilhar</button>
+  <button class="btn-main" onclick="compartilhar()">Gerar & Compartilhar</button>
 </div>
 
-<!-- RELATÓRIO (ESSE É O QUE VIRA FOTO) -->
+<!-- RELATÓRIO -->
 <div class="card" id="relatorio" style="display:none;">
   <div class="report" id="foto">
     <div class="reportTop">
-      <div class="reportLeft">Grendene –<br>Impressão Digital</div>
-      <div class="reportRight">Relatório de retrabalhos e<br>perdas 2D</div>
+      <div><strong>Grendene –<br>Impressão Digital</strong></div>
+      <div style="color:#6b7280;text-align:right">
+        Relatório de retrabalhos e<br>perdas 2D
+      </div>
     </div>
 
     <div class="divider"></div>
 
-    <!-- ✅ CABEÇALHO COMPLETO DENTRO DA FOTO -->
     <div class="reportMeta">
-      <div><span class="lbl">Responsável:</span> <b id="r_responsavel"></b></div>
-      <div><span class="lbl">Turno:</span> <b id="r_turno"></b></div>
-      <div><span class="lbl">Data:</span> <b id="r_data"></b></div>
-      <div><span class="lbl">Ramais:</span> <b id="r_ramais"></b></div>
+      <div><span>Responsável:</span> <b id="r_responsavel"></b></div>
+      <div><span>Turno:</span> <b id="r_turno"></b></div>
+      <div><span>Data:</span> <b id="r_data"></b></div>
+      <div><span>Ramais:</span> <b id="r_ramais"></b></div>
     </div>
 
     <table>
@@ -234,7 +253,6 @@ tfoot td{ font-weight:bold; }
 
 </div>
 
-<!-- html2canvas para gerar a imagem -->
 <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
 
 <script>
@@ -256,27 +274,22 @@ const MOTIVOS = [
 const editor = document.getElementById("editor");
 const totalEl = document.getElementById("total");
 
-function buildOptions(selected){
-  return MOTIVOS.map(m => {
-    const sel = (m === selected) ? "selected" : "";
-    return `<option ${sel}>${m}</option>`;
-  }).join("");
-}
-
-function addLinha(motivoSelecionado){
+function addLinha(motivo){
   const div = document.createElement("div");
   div.className = "row";
 
-  const motivo = motivoSelecionado || MOTIVOS[0];
-
   div.innerHTML = `
-    <select>${buildOptions(motivo)}</select>
+    <div class="motivo">${motivo}</div>
     <input type="number" min="0" value="0" oninput="calcTotal()">
     <textarea placeholder="Justificativa"></textarea>
     <div class="remove" onclick="this.parentElement.remove(); calcTotal()">×</div>
   `;
   editor.appendChild(div);
   calcTotal();
+}
+
+function addLinhaExtra(){
+  addLinha("Outro");
 }
 
 function calcTotal(){
@@ -293,28 +306,30 @@ function fmtDateBR(iso){
   return `${d}/${m}/${y}`;
 }
 
-// ✅ monta a tabela do relatório + cabeçalho completo dentro da foto
 function montarRelatorio(){
-  const responsavel = document.getElementById("responsavel").value || "";
-  const turno = document.getElementById("turno").value || "";
-  const dataISO = document.getElementById("data").value || "";
-  const ramais = document.getElementById("ramais").value || "";
+  document.getElementById("r_responsavel").textContent =
+    document.getElementById("responsavel").value || "";
 
-  document.getElementById("r_responsavel").textContent = responsavel;
-  document.getElementById("r_turno").textContent = turno;
-  document.getElementById("r_data").textContent = fmtDateBR(dataISO);
-  document.getElementById("r_ramais").textContent = ramais;
+  document.getElementById("r_turno").textContent =
+    document.getElementById("turno").value || "";
+
+  document.getElementById("r_data").textContent =
+    fmtDateBR(document.getElementById("data").value);
+
+  const ramaisSel = Array.from(
+    document.getElementById("ramais").selectedOptions
+  ).map(o=>o.value);
+
+  document.getElementById("r_ramais").textContent = ramaisSel.join(", ");
 
   const tbody = document.getElementById("tbody");
   tbody.innerHTML = "";
 
   let total = 0;
-
   editor.querySelectorAll(".row").forEach(r=>{
-    const m = r.children[0].value;
+    const m = r.children[0].textContent;
     const q = Number(r.children[1].value)||0;
     const j = r.children[2].value;
-
     total += q;
     tbody.innerHTML += `<tr><td>${m}</td><td>${q}</td><td>${j}</td></tr>`;
   });
@@ -326,57 +341,32 @@ function montarRelatorio(){
   document.getElementById("relatorio").style.display = "block";
 }
 
-async function gerarImagemBlob(){
+async function compartilhar(){
   montarRelatorio();
 
   const el = document.getElementById("foto");
-  const canvas = await html2canvas(el, {backgroundColor:"#fff", scale:2, useCORS:true});
-  const blob = await new Promise(res => canvas.toBlob(res, "image/png", 1));
-  return blob;
-}
+  const canvas = await html2canvas(el,{backgroundColor:"#fff",scale:2});
+  const blob = await new Promise(r=>canvas.toBlob(r,"image/png",1));
+  const file = new File([blob],"relatorio.png",{type:"image/png"});
 
-async function compartilhar(){
-  try{
-    const blob = await gerarImagemBlob();
-    const file = new File([blob], "relatorio.png", {type:"image/png"});
-
-    const texto =
-`Relatório de retrabalhos e perdas 2D
-Responsável: ${document.getElementById("responsavel").value || "-"}
-Turno: ${document.getElementById("turno").value || "-"}
-Data: ${fmtDateBR(document.getElementById("data").value) || "-"}
-Ramais: ${document.getElementById("ramais").value || "-"}`;
-
-    // ✅ Compartilhar com imagem (WhatsApp aparece na lista quando suportado)
-    if(navigator.canShare && navigator.canShare({files:[file]})){
-      await navigator.share({title:"Relatório 2D", text:texto, files:[file]});
-      return;
-    }
-
-    // Fallback: baixar a imagem
-    const url = URL.createObjectURL(blob);
+  if(navigator.canShare && navigator.canShare({files:[file]})){
+    await navigator.share({files:[file],title:"Relatório 2D"});
+  }else{
     const a = document.createElement("a");
-    a.href = url;
+    a.href = URL.createObjectURL(blob);
     a.download = "relatorio.png";
     a.click();
-    URL.revokeObjectURL(url);
-
-    alert("Seu navegador não permitiu compartilhar com imagem. A foto foi baixada.");
-  }catch(e){
-    console.error(e);
-    alert("Não foi possível gerar/compartilhar a imagem. Tente novamente.");
   }
 }
 
-// Data automática
-document.getElementById("data").value = new Date().toISOString().slice(0,10);
+// data automática
+document.getElementById("data").value =
+  new Date().toISOString().slice(0,10);
 
-// ✅ linhas iniciais: todas (uma por motivo)
+// linhas iniciais (todas)
 (function init(){
-  MOTIVOS.forEach(m => addLinha(m));
+  MOTIVOS.forEach(m=>addLinha(m));
 })();
-
-document.getElementById("btnShare").addEventListener("click", compartilhar);
 </script>
 
 </body>
