@@ -1,278 +1,265 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-<meta charset="UTF-8">
+<meta charset="UTF-8" />
 <title>Relatório de Retrabalhos e Perdas 2D</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
 <style>
-body{
-  font-family: Arial, Helvetica, sans-serif;
-  background:#f3f4f6;
-  margin:0;
-  padding:12px;
-}
-.container{ max-width:420px; margin:auto; }
-.card{
-  background:#fff;
-  border-radius:14px;
-  padding:14px;
-  margin-bottom:12px;
-  box-shadow:0 2px 6px rgba(0,0,0,.08);
-}
-.header{ display:flex; justify-content:space-between; align-items:flex-start; }
-.header-left{ font-weight:bold; font-size:16px; line-height:1.2; }
-.header-right{ font-size:14px; color:#6b7280; text-align:right; line-height:1.2; }
-.divider{ height:1px; background:#e5e7eb; margin:10px 0; }
+  body{font-family:Arial,Helvetica,sans-serif;background:#f3f4f6;margin:0;padding:12px}
+  .container{max-width:420px;margin:auto}
+  .card{background:#fff;border-radius:14px;padding:14px;margin-bottom:12px;box-shadow:0 2px 6px rgba(0,0,0,.08)}
+  .header{display:flex;justify-content:space-between;align-items:flex-start}
+  .header-left{font-weight:bold;font-size:16px;line-height:1.2}
+  .header-right{font-size:14px;color:#6b7280;text-align:right;line-height:1.2}
+  .divider{height:1px;background:#e5e7eb;margin:10px 0}
 
-/* FORM INFO */
-.info{
-  display:grid;
-  grid-template-columns:auto 1fr;
-  gap:8px 10px;
-  font-size:14px;
-  align-items:center;
-}
-.info span{ color:#6b7280; white-space:nowrap; }
+  .info{display:grid;grid-template-columns:auto 1fr;gap:8px 10px;font-size:14px;align-items:center}
+  .info span{color:#6b7280;white-space:nowrap}
 
-input, select, textarea{
-  width:100%;
-  padding:8px;
-  border-radius:8px;
-  border:1px solid #d1d5db;
-  font-size:14px;
-}
-textarea{ resize:none; }
+  input,select,textarea{width:100%;padding:8px;border-radius:8px;border:1px solid #d1d5db;font-size:14px}
+  textarea{resize:none}
 
-button{
-  border:none;
-  border-radius:10px;
-  padding:10px;
-  font-weight:bold;
-  cursor:pointer;
-}
-.btn-add{ background:#e5e7eb; }
-.btn-main{ background:#000; color:#fff; }
+  button{border:none;border-radius:10px;padding:10px;font-weight:bold;cursor:pointer}
+  .btn-add{background:#e5e7eb}
+  .btn-main{background:#000;color:#fff}
 
-/* ✅ Ramais em linha baixa (tipo digitável) */
-.ramais-box{
-  border:1px solid #d1d5db;
-  border-radius:8px;
-  padding:6px 8px;
-  display:flex;
-  gap:6px;
-  flex-wrap:wrap;
-  align-items:center;
-  min-height:36px; /* mesma “altura” de input */
-  background:#fff;
-}
-.ramal-pill{
-  display:inline-flex;
-  align-items:center;
-  gap:6px;
-  padding:6px 8px;
-  border:1px solid #e5e7eb;
-  border-radius:999px;
-  font-size:14px;
-  user-select:none;
-}
-.ramal-pill input{ width:auto; padding:0; margin:0; }
+  /* Ramais em linha baixa */
+  .ramais-box{
+    border:1px solid #d1d5db;border-radius:8px;padding:6px 8px;
+    display:flex;gap:8px;flex-wrap:wrap;align-items:center;min-height:36px
+  }
+  .ramal-pill{
+    display:inline-flex;align-items:center;gap:6px;
+    padding:6px 10px;border:1px solid #e5e7eb;border-radius:999px;font-size:14px
+  }
+  .ramal-pill input{width:auto;padding:0;margin:0}
 
-/* EDITOR */
-.row{
-  display:grid;
-  grid-template-columns: 1.6fr 0.8fr 1.8fr 28px;
-  gap:6px;
-  margin-bottom:6px;
-  align-items:center;
-}
-.row .motivo{
-  font-size:14px;
-  line-height:1.2;
-  /* ✅ NÃO cortar - deixar visível */
-  white-space:normal;
-  word-break:break-word;
-}
-.remove{
-  color:#dc2626;
-  font-size:20px;
-  text-align:center;
-  cursor:pointer;
-}
-.total{ text-align:right; font-weight:bold; margin-top:6px; }
+  /* Editor */
+  .row{display:grid;grid-template-columns:1.6fr .8fr 1.8fr 28px;gap:6px;margin-bottom:6px;align-items:center}
+  .row .motivo{font-size:14px;line-height:1.2;white-space:normal;word-break:break-word}
+  .remove{color:#dc2626;font-size:20px;text-align:center;cursor:pointer}
+  .total{text-align:right;font-weight:bold;margin-top:6px}
 
-/* RELATÓRIO (FOTO) */
-.report{
-  background:#fff;
-  border-radius:14px;
-  padding:14px;
-}
-.reportTop{
-  display:flex;
-  justify-content:space-between;
-  align-items:flex-start;
-}
-.reportMeta{
-  display:grid;
-  grid-template-columns:auto 1fr;
-  gap:8px 10px;
-  font-size:14px;
-  margin-top:10px;
-  align-items:center;
-}
-.reportMeta span{ color:#6b7280; white-space:nowrap; }
+  /* Relatório */
+  .report{background:#fff;border-radius:14px;padding:14px}
+  .reportTop{display:flex;justify-content:space-between;align-items:flex-start}
+  .reportMeta{display:grid;grid-template-columns:auto 1fr;gap:8px 10px;font-size:14px;margin-top:10px;align-items:center}
+  .reportMeta span{color:#6b7280;white-space:nowrap}
 
-table{
-  width:100%;
-  border-collapse:collapse;
-  font-size:13px;
-  margin-top:10px;
-}
-th, td{
-  border:1px solid #e5e7eb;
-  padding:8px;
-  vertical-align:middle;
-}
-th{ background:#f9fafb; text-align:left; }
+  table{width:100%;border-collapse:collapse;font-size:13px;margin-top:10px}
+  th,td{border:1px solid #e5e7eb;padding:8px;vertical-align:middle}
+  th{background:#f9fafb;text-align:left}
+  td:nth-child(1){white-space:normal;word-break:break-word;line-height:1.2}
+  th:nth-child(2),td:nth-child(2){width:64px;text-align:center}
+  th:nth-child(3),td:nth-child(3){width:44%}
+  tfoot td{font-weight:bold}
 
-/* ✅ Motivo visível (pode quebrar linha) */
-td:nth-child(1){
-  white-space:normal;
-  word-break:break-word;
-  line-height:1.2;
-}
-
-/* colunas */
-th:nth-child(2), td:nth-child(2){
-  width:64px;
-  text-align:center;
-}
-th:nth-child(3), td:nth-child(3){
-  width:44%;
-}
-
-tfoot td{ font-weight:bold; }
-.footer{ font-size:12px; color:#6b7280; margin-top:8px; }
+  .footer{font-size:12px;color:#6b7280;margin-top:8px}
 </style>
 </head>
 
 <body>
 <div class="container">
 
-<!-- FORMULÁRIO -->
-<div class="card">
-  <div class="header">
-    <div class="header-left">Grendene –<br>Impressão Digital</div>
-    <div class="header-right">Relatório de retrabalhos e<br>perdas 2D</div>
-  </div>
-
-  <div class="divider"></div>
-
-  <div class="info">
-    <span>Responsável:</span>
-    <input id="responsavel">
-
-    <span>Turno:</span>
-    <select id="turno">
-      <option>1º</option>
-      <option selected>2º</option>
-      <option>3º</option>
-    </select>
-
-    <span>Data:</span>
-    <input type="date" id="data">
-
-    <span>Ramais:</span>
-    <div class="ramais-box" id="ramaisBox">
-      <label class="ramal-pill"><input type="checkbox" value="1">1</label>
-      <label class="ramal-pill"><input type="checkbox" value="2">2</label>
-      <label class="ramal-pill"><input type="checkbox" value="3">3</label>
-      <label class="ramal-pill"><input type="checkbox" value="4">4</label>
-      <label class="ramal-pill"><input type="checkbox" value="5">5</label>
-      <label class="ramal-pill"><input type="checkbox" value="6">6</label>
+  <!-- Cabeçalho / Form -->
+  <div class="card">
+    <div class="header">
+      <div class="header-left">Grendene –<br>Impressão Digital</div>
+      <div class="header-right">Relatório de retrabalhos e<br>perdas 2D</div>
     </div>
-  </div>
-</div>
-
-<!-- BOTÃO -->
-<div class="card">
-  <button class="btn-add" onclick="addLinhaExtra()">Adicionar linha</button>
-</div>
-
-<!-- EDITOR -->
-<div class="card" id="editor"></div>
-
-<div class="total">Total: <span id="total">0</span></div>
-
-<div class="card">
-  <button class="btn-main" onclick="compartilhar()">Gerar & Compartilhar</button>
-</div>
-
-<!-- RELATÓRIO -->
-<div class="card" id="relatorio" style="display:none;">
-  <div class="report" id="foto">
-    <div class="reportTop">
-      <div><strong>Grendene –<br>Impressão Digital</strong></div>
-      <div style="color:#6b7280;text-align:right">Relatório de retrabalhos e<br>perdas 2D</div>
-    </div>
-
     <div class="divider"></div>
 
-    <div class="reportMeta">
-      <span>Responsável:</span><b id="r_responsavel"></b>
-      <span>Turno:</span><b id="r_turno"></b>
-      <span>Data:</span><b id="r_data"></b>
-      <span>Ramais:</span><b id="r_ramais"></b>
+    <div class="info">
+      <span>Responsável:</span>
+      <input id="responsavel" />
+
+      <span>Turno:</span>
+      <select id="turno">
+        <option>1º</option>
+        <option selected>2º</option>
+        <option>3º</option>
+      </select>
+
+      <span>Data:</span>
+      <input type="date" id="data" />
+
+      <span>Ramais:</span>
+      <div class="ramais-box" id="ramaisBox">
+        <label class="ramal-pill"><input type="checkbox" value="1">1</label>
+        <label class="ramal-pill"><input type="checkbox" value="2">2</label>
+        <label class="ramal-pill"><input type="checkbox" value="3">3</label>
+        <label class="ramal-pill"><input type="checkbox" value="4">4</label>
+        <label class="ramal-pill"><input type="checkbox" value="5">5</label>
+        <label class="ramal-pill"><input type="checkbox" value="6">6</label>
+      </div>
     </div>
-
-    <table>
-      <thead>
-        <tr>
-          <th>Motivo</th>
-          <th>Qtde.</th>
-          <th>Justificativa</th>
-        </tr>
-      </thead>
-      <tbody id="tbody"></tbody>
-      <tfoot>
-        <tr>
-          <td>TOTAL</td>
-          <td id="totalFinal"></td>
-          <td></td>
-        </tr>
-      </tfoot>
-    </table>
-
-    <div class="footer">Gerado em <span id="geradoEm"></span></div>
   </div>
-</div>
+
+  <div class="card">
+    <button class="btn-add" onclick="addLinhaExtra()">Adicionar linha</button>
+  </div>
+
+  <!-- ✅ Editor com as descrições -->
+  <div class="card" id="editor"></div>
+
+  <div class="total">Total: <span id="total">0</span></div>
+
+  <div class="card">
+    <button class="btn-main" onclick="compartilhar()">Gerar & Compartilhar</button>
+  </div>
+
+  <!-- Relatório / Foto -->
+  <div class="card" id="relatorio" style="display:none;">
+    <div class="report" id="foto">
+      <div class="reportTop">
+        <div><strong>Grendene –<br>Impressão Digital</strong></div>
+        <div style="color:#6b7280;text-align:right">Relatório de retrabalhos e<br>perdas 2D</div>
+      </div>
+
+      <div class="divider"></div>
+
+      <div class="reportMeta">
+        <span>Responsável:</span><b id="r_responsavel"></b>
+        <span>Turno:</span><b id="r_turno"></b>
+        <span>Data:</span><b id="r_data"></b>
+        <span>Ramais:</span><b id="r_ramais"></b>
+      </div>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Motivo</th>
+            <th>Qtde.</th>
+            <th>Justificativa</th>
+          </tr>
+        </thead>
+        <tbody id="tbody"></tbody>
+        <tfoot>
+          <tr>
+            <td>TOTAL</td>
+            <td id="totalFinal">0</td>
+            <td></td>
+          </tr>
+        </tfoot>
+      </table>
+
+      <div class="footer">Gerado em <span id="geradoEm"></span></div>
+    </div>
+  </div>
 
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
-
 <script>
-/* ✅ Só encurtamos 2 motivos (como você pediu) */
-const MOTIVOS = [
-  "Aplicação de base - imp",
-  "Base - imp",
-  "Falha de Impressão - imp",
-  "Filete Branco - imp",
-  "Logo sem definição - imp",
-  "Manchas - imp",
-  "Número Trocado - imp",
-  "Perda de Injeção - imp",
-  "Sem Impressão - imp",
-  "Sujeira no inferior - imp",
-  "Troca de Imagem - imp",
-  "Lâminados falhas - imp"
-];
+  const MOTIVOS = [
+    "Aplicação de base - imp",
+    "Base - imp",
+    "Falha de Impressão - imp",
+    "Filete Branco - imp",
+    "Logo sem definição - imp",
+    "Manchas - imp",
+    "Número Trocado - imp",
+    "Perda de Injeção - imp",
+    "Sem Impressão - imp",
+    "Sujeira no inferior - imp",
+    "Troca de Imagem - imp",
+    "Lâminados falhas - imp"
+  ];
 
-const editor = document.getElementById("editor");
-const totalEl = document.getElementById("total");
+  const editor = document.getElementById("editor");
+  const totalEl = document.getElementById("total");
 
-function addLinha(motivo){
-  const div = document.createElement("div");
-  div.className = "row";
-  div.innerHTML = `
-    <div class="mot
+  function addLinha(motivo){
+    const div = document.createElement("div");
+    div.className = "row";
+    div.innerHTML = `
+      <div class="motivo">${motivo}</div>
+      <input type="number" min="0" value="0" oninput="calcTotal()">
+      <textarea placeholder="Justificativa"></textarea>
+      <div class="remove" onclick="this.parentElement.remove(); calcTotal()">×</div>
+    `;
+    editor.appendChild(div);
+    calcTotal();
+  }
+
+  function addLinhaExtra(){
+    addLinha(" "); // se ficar vazio, não entra no relatório
+  }
+
+  function calcTotal(){
+    let t = 0;
+    editor.querySelectorAll("input[type=number]").forEach(i => t += (Number(i.value)||0));
+    totalEl.textContent = t;
+  }
+
+  function fmtDateBR(iso){
+    if(!iso) return "";
+    const [y,m,d] = iso.split("-");
+    return `${d}/${m}/${y}`;
+  }
+
+  function getRamaisSelecionados(){
+    return Array.from(document.querySelectorAll("#ramaisBox input[type=checkbox]:checked"))
+      .map(i => i.value);
+  }
+
+  function montarRelatorio(){
+    document.getElementById("r_responsavel").textContent = document.getElementById("responsavel").value || "";
+    document.getElementById("r_turno").textContent = document.getElementById("turno").value || "";
+    document.getElementById("r_data").textContent = fmtDateBR(document.getElementById("data").value);
+
+    const ramaisSel = getRamaisSelecionados();
+    document.getElementById("r_ramais").textContent = ramaisSel.join(", ");
+
+    const tbody = document.getElementById("tbody");
+    tbody.innerHTML = "";
+
+    let total = 0;
+
+    editor.querySelectorAll(".row").forEach(r=>{
+      const m = (r.children[0].textContent || "").trim();
+      const q = Number(r.children[1].value)||0;
+      const j = r.children[2].value || "";
+
+      if(!m) return; // evita linha vazia
+
+      total += q;
+      tbody.innerHTML += `<tr><td>${m}</td><td>${q}</td><td>${j}</td></tr>`;
+    });
+
+    document.getElementById("totalFinal").textContent = total;
+    document.getElementById("geradoEm").textContent = new Date().toLocaleString("pt-BR");
+    document.getElementById("relatorio").style.display = "block";
+  }
+
+  async function compartilhar(){
+    montarRelatorio();
+
+    const el = document.getElementById("foto");
+    const canvas = await html2canvas(el,{backgroundColor:"#fff",scale:2});
+    const blob = await new Promise(r=>canvas.toBlob(r,"image/png",1));
+    const file = new File([blob],"relatorio.png",{type:"image/png"});
+
+    if(navigator.canShare && navigator.canShare({files:[file]})){
+      await navigator.share({files:[file],title:"Relatório 2D"});
+    }else{
+      const a = document.createElement("a");
+      a.href = URL.createObjectURL(blob);
+      a.download = "relatorio.png";
+      a.click();
+    }
+  }
+
+  // data automática
+  document.getElementById("data").value = new Date().toISOString().slice(0,10);
+
+  // ✅ garante que as descrições sempre apareçam
+  (function init(){
+    editor.innerHTML = "";
+    MOTIVOS.forEach(m => addLinha(m));
+  })();
+</script>
+
+</body>
+</html>
