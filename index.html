@@ -12,10 +12,7 @@ body{
   margin:0;
   padding:12px;
 }
-.container{
-  max-width:420px;
-  margin:auto;
-}
+.container{ max-width:420px; margin:auto; }
 .card{
   background:#fff;
   border-radius:14px;
@@ -23,40 +20,21 @@ body{
   margin-bottom:12px;
   box-shadow:0 2px 6px rgba(0,0,0,.08);
 }
-.header{
-  display:flex;
-  justify-content:space-between;
-  align-items:flex-start;
-}
-.header-left{
-  font-weight:bold;
-  font-size:16px;
-  line-height:1.2;
-}
-.header-right{
-  font-size:14px;
-  color:#6b7280;
-  text-align:right;
-  line-height:1.2;
-}
-.divider{
-  height:1px;
-  background:#e5e7eb;
-  margin:10px 0;
-}
+.header{ display:flex; justify-content:space-between; align-items:flex-start; }
+.header-left{ font-weight:bold; font-size:16px; line-height:1.2; }
+.header-right{ font-size:14px; color:#6b7280; text-align:right; line-height:1.2; }
+.divider{ height:1px; background:#e5e7eb; margin:10px 0; }
 
 /* FORM INFO */
 .info{
   display:grid;
-  grid-template-columns: auto 1fr;
+  grid-template-columns:auto 1fr;
   gap:8px 10px;
   font-size:14px;
   align-items:center;
 }
-.info span{
-  color:#6b7280;
-  white-space:nowrap;
-}
+.info span{ color:#6b7280; white-space:nowrap; }
+
 input, select, textarea{
   width:100%;
   padding:8px;
@@ -66,13 +44,6 @@ input, select, textarea{
 }
 textarea{ resize:none; }
 
-/* ✅ Ramais menor/largura controlada */
-#ramais{
-  width:150px;          /* mais estreito */
-  max-width:150px;
-}
-
-/* botões */
 button{
   border:none;
   border-radius:10px;
@@ -82,6 +53,30 @@ button{
 }
 .btn-add{ background:#e5e7eb; }
 .btn-main{ background:#000; color:#fff; }
+
+/* ✅ Ramais em linha baixa (tipo digitável) */
+.ramais-box{
+  border:1px solid #d1d5db;
+  border-radius:8px;
+  padding:6px 8px;
+  display:flex;
+  gap:6px;
+  flex-wrap:wrap;
+  align-items:center;
+  min-height:36px; /* mesma “altura” de input */
+  background:#fff;
+}
+.ramal-pill{
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  padding:6px 8px;
+  border:1px solid #e5e7eb;
+  border-radius:999px;
+  font-size:14px;
+  user-select:none;
+}
+.ramal-pill input{ width:auto; padding:0; margin:0; }
 
 /* EDITOR */
 .row{
@@ -93,12 +88,10 @@ button{
 }
 .row .motivo{
   font-size:14px;
-
-  /* ✅ padronizar altura visual (evitar linhas gigantes) */
   line-height:1.2;
-  white-space:nowrap;
-  overflow:hidden;
-  text-overflow:ellipsis;
+  /* ✅ NÃO cortar - deixar visível */
+  white-space:normal;
+  word-break:break-word;
 }
 .remove{
   color:#dc2626;
@@ -106,11 +99,7 @@ button{
   text-align:center;
   cursor:pointer;
 }
-.total{
-  text-align:right;
-  font-weight:bold;
-  margin-top:6px;
-}
+.total{ text-align:right; font-weight:bold; margin-top:6px; }
 
 /* RELATÓRIO (FOTO) */
 .report{
@@ -125,42 +114,35 @@ button{
 }
 .reportMeta{
   display:grid;
-  grid-template-columns: auto 1fr;
+  grid-template-columns:auto 1fr;
   gap:8px 10px;
   font-size:14px;
   margin-top:10px;
   align-items:center;
 }
-.reportMeta span{
-  color:#6b7280;
-  white-space:nowrap;
-}
+.reportMeta span{ color:#6b7280; white-space:nowrap; }
 
 table{
   width:100%;
   border-collapse:collapse;
   font-size:13px;
   margin-top:10px;
-  table-layout:fixed; /* ✅ ajuda a padronizar */
 }
 th, td{
   border:1px solid #e5e7eb;
   padding:8px;
-  vertical-align:middle; /* ✅ altura mais padrão */
+  vertical-align:middle;
 }
-th{
-  background:#f9fafb;
-  text-align:left;
-}
+th{ background:#f9fafb; text-align:left; }
 
-/* ✅ Motivo não estourar e não criar linhas muito altas */
+/* ✅ Motivo visível (pode quebrar linha) */
 td:nth-child(1){
-  white-space:nowrap;
-  overflow:hidden;
-  text-overflow:ellipsis;
+  white-space:normal;
+  word-break:break-word;
+  line-height:1.2;
 }
 
-/* ✅ Colunas com largura melhor */
+/* colunas */
 th:nth-child(2), td:nth-child(2){
   width:64px;
   text-align:center;
@@ -170,12 +152,7 @@ th:nth-child(3), td:nth-child(3){
 }
 
 tfoot td{ font-weight:bold; }
-
-.footer{
-  font-size:12px;
-  color:#6b7280;
-  margin-top:8px;
-}
+.footer{ font-size:12px; color:#6b7280; margin-top:8px; }
 </style>
 </head>
 
@@ -185,12 +162,8 @@ tfoot td{ font-weight:bold; }
 <!-- FORMULÁRIO -->
 <div class="card">
   <div class="header">
-    <div class="header-left">
-      Grendene –<br>Impressão Digital
-    </div>
-    <div class="header-right">
-      Relatório de retrabalhos e<br>perdas 2D
-    </div>
+    <div class="header-left">Grendene –<br>Impressão Digital</div>
+    <div class="header-right">Relatório de retrabalhos e<br>perdas 2D</div>
   </div>
 
   <div class="divider"></div>
@@ -210,10 +183,14 @@ tfoot td{ font-weight:bold; }
     <input type="date" id="data">
 
     <span>Ramais:</span>
-    <select id="ramais" multiple>
-      <option>1</option><option>2</option><option>3</option>
-      <option>4</option><option>5</option><option>6</option>
-    </select>
+    <div class="ramais-box" id="ramaisBox">
+      <label class="ramal-pill"><input type="checkbox" value="1">1</label>
+      <label class="ramal-pill"><input type="checkbox" value="2">2</label>
+      <label class="ramal-pill"><input type="checkbox" value="3">3</label>
+      <label class="ramal-pill"><input type="checkbox" value="4">4</label>
+      <label class="ramal-pill"><input type="checkbox" value="5">5</label>
+      <label class="ramal-pill"><input type="checkbox" value="6">6</label>
+    </div>
   </div>
 </div>
 
@@ -236,9 +213,7 @@ tfoot td{ font-weight:bold; }
   <div class="report" id="foto">
     <div class="reportTop">
       <div><strong>Grendene –<br>Impressão Digital</strong></div>
-      <div style="color:#6b7280;text-align:right">
-        Relatório de retrabalhos e<br>perdas 2D
-      </div>
+      <div style="color:#6b7280;text-align:right">Relatório de retrabalhos e<br>perdas 2D</div>
     </div>
 
     <div class="divider"></div>
@@ -268,9 +243,7 @@ tfoot td{ font-weight:bold; }
       </tfoot>
     </table>
 
-    <div class="footer">
-      Gerado em <span id="geradoEm"></span>
-    </div>
+    <div class="footer">Gerado em <span id="geradoEm"></span></div>
   </div>
 </div>
 
@@ -279,17 +252,18 @@ tfoot td{ font-weight:bold; }
 <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
 
 <script>
+/* ✅ Só encurtamos 2 motivos (como você pediu) */
 const MOTIVOS = [
   "Aplicação de base - imp",
   "Base - imp",
   "Falha de Impressão - imp",
   "Filete Branco - imp",
-  "Logo Ipanema sem definição - imp",
+  "Logo sem definição - imp",
   "Manchas - imp",
   "Número Trocado - imp",
   "Perda de Injeção - imp",
   "Sem Impressão - imp",
-  "Sujeira no inferior da sola - imp",
+  "Sujeira no inferior - imp",
   "Troca de Imagem - imp",
   "Lâminados falhas - imp"
 ];
@@ -300,104 +274,5 @@ const totalEl = document.getElementById("total");
 function addLinha(motivo){
   const div = document.createElement("div");
   div.className = "row";
-
   div.innerHTML = `
-    <div class="motivo" title="${motivo}">${motivo}</div>
-    <input type="number" min="0" value="0" oninput="calcTotal()">
-    <textarea placeholder="Justificativa"></textarea>
-    <div class="remove" onclick="this.parentElement.remove(); calcTotal()">×</div>
-  `;
-  editor.appendChild(div);
-  calcTotal();
-}
-
-/* linha extra (se precisar mesmo) */
-function addLinhaExtra(){
-  addLinha(" ");
-}
-
-function calcTotal(){
-  let t = 0;
-  editor.querySelectorAll("input[type=number]").forEach(i=>{
-    t += Number(i.value)||0;
-  });
-  totalEl.textContent = t;
-}
-
-function fmtDateBR(iso){
-  if(!iso) return "";
-  const [y,m,d] = iso.split("-");
-  return `${d}/${m}/${y}`;
-}
-
-function montarRelatorio(){
-  document.getElementById("r_responsavel").textContent =
-    document.getElementById("responsavel").value || "";
-
-  document.getElementById("r_turno").textContent =
-    document.getElementById("turno").value || "";
-
-  document.getElementById("r_data").textContent =
-    fmtDateBR(document.getElementById("data").value);
-
-  const ramaisSel = Array.from(
-    document.getElementById("ramais").selectedOptions
-  ).map(o=>o.value);
-
-  document.getElementById("r_ramais").textContent = ramaisSel.join(", ");
-
-  const tbody = document.getElementById("tbody");
-  tbody.innerHTML = "";
-
-  let total = 0;
-
-  // ✅ NÃO adiciona linha vazia no final: só vai as linhas que existem
-  editor.querySelectorAll(".row").forEach(r=>{
-    const m = (r.children[0].textContent || "").trim();
-    const q = Number(r.children[1].value)||0;
-    const j = r.children[2].value || "";
-
-    // ✅ ignora linhas sem motivo (caso alguém adicione " " )
-    if(!m) return;
-
-    total += q;
-    tbody.innerHTML += `<tr><td title="${m}">${m}</td><td>${q}</td><td>${j}</td></tr>`;
-  });
-
-  document.getElementById("totalFinal").textContent = total;
-  document.getElementById("geradoEm").textContent =
-    new Date().toLocaleString("pt-BR");
-
-  document.getElementById("relatorio").style.display = "block";
-}
-
-async function compartilhar(){
-  montarRelatorio();
-
-  const el = document.getElementById("foto");
-  const canvas = await html2canvas(el,{backgroundColor:"#fff",scale:2});
-  const blob = await new Promise(r=>canvas.toBlob(r,"image/png",1));
-  const file = new File([blob],"relatorio.png",{type:"image/png"});
-
-  if(navigator.canShare && navigator.canShare({files:[file]})){
-    await navigator.share({files:[file],title:"Relatório 2D"});
-  }else{
-    const a = document.createElement("a");
-    a.href = URL.createObjectURL(blob);
-    a.download = "relatorio.png";
-    a.click();
-  }
-}
-
-// data automática
-document.getElementById("data").value =
-  new Date().toISOString().slice(0,10);
-
-// linhas iniciais
-(function init(){
-  MOTIVOS.forEach(m=>addLinha(m));
-})();
-</script>
-
-</body>
-</html>
+    <div class="mot
