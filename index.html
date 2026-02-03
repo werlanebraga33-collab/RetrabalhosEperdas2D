@@ -1,187 +1,156 @@
-l<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Relatório de Retrabalhos e Perdas 2D</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Relatório de retrabalhos e perdas 2D</title>
 
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background: #f5f6f8;
-      margin: 0;
-      padding: 16px;
-      color: #333;
-    }
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    background: #f4f4f4;
+    padding: 16px;
+    color: #000;
+  }
 
-    h1 {
-      font-size: 18px;
-      margin-bottom: 12px;
-    }
+  .card {
+    background: #fff;
+    padding: 16px;
+    border-radius: 6px;
+    margin-bottom: 16px;
+  }
 
-    .card {
-      background: #fff;
-      border-radius: 10px;
-      padding: 16px;
-      margin-bottom: 16px;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.08);
-    }
+  h2 {
+    display: flex;
+    justify-content: space-between;
+    font-size: 18px;
+    margin-bottom: 12px;
+  }
 
-    label {
-      font-size: 13px;
-      display: block;
-      margin-bottom: 4px;
-    }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 12px;
+  }
 
-    input, select {
-      width: 100%;
-      padding: 8px;
-      font-size: 14px;
-      border-radius: 6px;
-      border: 1px solid #ccc;
-      box-sizing: border-box;
-      margin-bottom: 10px;
-    }
+  th, td {
+    border: 1px solid #ccc;
+    padding: 8px;
+    font-size: 14px;
+  }
 
-    .ramais {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 8px;
-    }
+  th {
+    background: #eee;
+    text-align: left;
+  }
 
-    .ramais label {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      font-size: 14px;
-    }
+  input[type="number"] {
+    width: 60px;
+    text-align: center;
+  }
 
-    .linha {
-      display: grid;
-      grid-template-columns: 1.6fr 0.5fr 1.6fr 0.2fr;
-      gap: 6px;
-      align-items: center;
-      margin-bottom: 8px;
-    }
+  input[type="text"] {
+    width: 100%;
+  }
 
-    .linha span {
-      font-size: 13px;
-    }
+  .total-row td {
+    font-weight: bold;
+  }
 
-    .linha input[type="number"] {
-      text-align: center;
-    }
-
-    .linha button {
-      background: none;
-      border: none;
-      color: red;
-      font-size: 18px;
-      cursor: pointer;
-    }
-
-    .btn {
-      background: #e9eaee;
-      border: none;
-      padding: 10px;
-      border-radius: 8px;
-      font-size: 14px;
-      cursor: pointer;
-      width: 100%;
-    }
-
-    .total {
-      font-weight: bold;
-      text-align: right;
-      margin-top: 12px;
-    }
-  </style>
+  button {
+    margin-top: 12px;
+    padding: 8px 12px;
+    cursor: pointer;
+  }
+</style>
 </head>
 
 <body>
 
-  <div class="card">
-    <h1>Grendene – Impressão Digital</h1>
+<div class="card">
+  <h2>
+    <span><strong>Grendene – Impressão Digital</strong></span>
+    <span>Relatório de retrabalhos e perdas 2D</span>
+  </h2>
 
-    <label>Responsável</label>
-    <input type="text">
-
-    <label>Turno</label>
+  <p><strong>Responsável:</strong> <input type="text"></p>
+  <p><strong>Turno:</strong> 
     <select>
       <option>1º</option>
       <option selected>2º</option>
       <option>3º</option>
     </select>
+  </p>
+  <p><strong>Data:</strong> <input type="date"></p>
+  <p><strong>Ramais:</strong> <input type="text" placeholder="Ex: 1, 3, 6"></p>
 
-    <label>Data</label>
-    <input type="date" value="2026-02-03">
+  <table id="tabela">
+    <thead>
+      <tr>
+        <th>Motivo</th>
+        <th>Qtde.</th>
+        <th>Justificativa</th>
+      </tr>
+    </thead>
+    <tbody>
+      <!-- linhas -->
+    </tbody>
+    <tfoot>
+      <tr class="total-row">
+        <td>TOTAL</td>
+        <td id="total">0</td>
+        <td></td>
+      </tr>
+    </tfoot>
+  </table>
 
-    <label>Ramais</label>
-    <div class="ramais">
-      <label><input type="checkbox">1</label>
-      <label><input type="checkbox">2</label>
-      <label><input type="checkbox">3</label>
-      <label><input type="checkbox">4</label>
-      <label><input type="checkbox">5</label>
-      <label><input type="checkbox">6</label>
-    </div>
-  </div>
-
-  <div class="card">
-    <button class="btn" onclick="adicionarLinha()">Adicionar linha</button>
-  </div>
-
-  <div class="card" id="linhas">
-
-    <!-- Linhas iniciais -->
-    <script>
-      const motivos = [
-        "Aplicação de base - imp",
-        "Base - imp",
-        "Falha de Impressão - imp",
-        "Filete Branco - imp",
-        "Logo sem definição - imp",
-        "Manchas - imp",
-        "Número Trocado - imp"
-      ];
-    </script>
-
-  </div>
-
-  <div class="card">
-    <div class="total">Total: <span id="total">0</span></div>
-  </div>
+  <button onclick="gerarRelatorio()">Gerar Relatório</button>
+</div>
 
 <script>
-  const linhasDiv = document.getElementById("linhas");
+const motivos = [
+  "Aplicação de base - imp",
+  "Base - imp",
+  "Falha de Impressão - imp",
+  "Filete Branco - imp",
+  "Logo sem definição - imp",
+  "Manchas - imp",
+  "Número Trocado - imp",
+  "Perda de Injeção - imp",
+  "Sem Impressão - imp",
+  "Sujeira no inferior - imp",
+  "Troca de Imagem - imp",
+  "Lâminados falhas - imp"
+];
 
-  function criarLinha(texto = "") {
-    const div = document.createElement("div");
-    div.className = "linha";
+const tbody = document.querySelector("#tabela tbody");
 
-    div.innerHTML = `
-      <span>${texto}</span>
-      <input type="number" min="0" step="1" oninput="calcularTotal()">
-      <input type="text" placeholder="Justificativa">
-      <button onclick="this.parentElement.remove(); calcularTotal()">✖</button>
-    `;
+motivos.forEach(motivo => {
+  const tr = document.createElement("tr");
+  tr.innerHTML = `
+    <td>${motivo}</td>
+    <td><input type="number" min="0" oninput="calcularTotal()"></td>
+    <td><input type="text"></td>
+  `;
+  tbody.appendChild(tr);
+});
 
-    linhasDiv.appendChild(div);
-  }
+function calcularTotal() {
+  let soma = 0;
+  document.querySelectorAll('tbody input[type="number"]').forEach(i => {
+    soma += Number(i.value) || 0;
+  });
+  document.getElementById("total").innerText = soma;
+}
 
-  motivos.forEach(m => criarLinha(m));
-
-  function adicionarLinha() {
-    criarLinha("Outro - imp");
-  }
-
-  function calcularTotal() {
-    let total = 0;
-    document.querySelectorAll('.linha input[type="number"]').forEach(inp => {
-      total += Number(inp.value) || 0;
-    });
-    document.getElementById("total").innerText = total;
-  }
+function gerarRelatorio() {
+  document.querySelectorAll('tbody tr').forEach(tr => {
+    const qtdInput = tr.children[1].querySelector("input");
+    if (!qtdInput.value || Number(qtdInput.value) === 0) {
+      qtdInput.value = "";
+    }
+  });
+}
 </script>
 
 </body>
