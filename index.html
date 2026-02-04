@@ -225,11 +225,11 @@
     position: fixed;
     left: -99999px;
     top: 0;
-    width: 980px;     /* foto larga */
+    width: 980px;
     background:#fff;
   }
 
-  /* ======== RELATÓRIO DA FOTO (fontes ainda maiores) ======== */
+  /* ======== RELATÓRIO DA FOTO (ALTERAÇÕES VISÍVEIS) ======== */
   .photo-card{
     background:#fff;
     border-radius:0;
@@ -246,31 +246,33 @@
     padding-bottom:14px;
     margin-bottom:16px;
   }
+  /* >>> AUMENTO FORTE NO CABEÇALHO <<< */
   .photo-header .h-left{
-    font-size:30px;     /* MAIS AUMENTADO */
+    font-size:34px;   /* AUMENTADO (era 26/30) */
     font-weight:900;
     white-space:nowrap;
   }
   .photo-header .h-right{
-    font-size:26px;     /* MAIS AUMENTADO */
+    font-size:28px;   /* AUMENTADO (era 22/26) */
     color:#6b6b6b;
     white-space:nowrap;
   }
 
+  /* >>> AUMENTO NAS INFORMAÇÕES <<< */
   .meta-grid{
     display:grid;
     grid-template-columns: 1.6fr 0.6fr 0.8fr 1.2fr;
     gap:14px 22px;
     align-items:center;
     margin:12px 0 16px;
-    font-size:20px;     /* MAIS AUMENTADO */
+    font-size:22px;   /* AUMENTADO (era 18/20) */
   }
   .meta-item .m-label{
     color:#666;
     margin-right:8px;
   }
   .meta-item .m-value{
-    font-weight:800;
+    font-weight:900;
   }
 
   .photo-table{
@@ -281,44 +283,49 @@
   .photo-table th, .photo-table td{
     border:1px solid #d8d8d8;
     padding:12px 12px;
-    vertical-align:middle; /* CENTRALIZA verticalmente (tabela toda) */
+    vertical-align:middle;
   }
   .photo-table th{
     background:#efefef;
     font-weight:900;
-    font-size:19px;     /* AUMENTADO */
+    font-size:21px;   /* AUMENTADO */
   }
   .photo-table td{
-    font-size:18px;     /* AUMENTADO */
+    font-size:19px;   /* AUMENTADO */
   }
 
-  /* Foto: justificativa maior */
   .photo-table th.col-motivo, .photo-table td.col-motivo { width: 28%; }
   .photo-table th.col-qtd,    .photo-table td.col-qtd    { width: 12%; text-align:center; }
   .photo-table th.col-just,   .photo-table td.col-just   { width: 60%; }
 
-  /* Quantidade com peso */
   .photo-table td.col-qtd strong{
-    font-size:19px;
+    font-size:21px;
     font-weight:900;
   }
 
-  /* JUSTIFICATIVA: centralizada no meio (como você pediu) */
+  /* >>> JUSTIFICATIVA CENTRALIZADA (H e V) <<< */
   .photo-table td.col-just{
-    vertical-align:middle;
+    padding:0; /* deixa o conteúdo realmente central */
   }
-  /* wrapper interno da justificativa: ocupa a célula e mantém “no meio” */
   .jwrap{
     display:flex;
-    align-items:center;        /* vertical no meio */
-    min-height: 28px;
+    align-items:center;       /* vertical */
+    justify-content:center;   /* horizontal */
+    text-align:center;        /* garante central mesmo em quebra de linha */
     width:100%;
+    height:100%;
+    padding:12px 12px;
+    box-sizing:border-box;
+    overflow-wrap: break-word;
+    word-break: normal;
+    hyphens: auto;
+    min-height: 34px;
   }
 
   .photo-footer{
     margin-top:14px;
     color:#666;
-    font-size:15px; /* um pouco maior */
+    font-size:16px;
   }
 
   @media (max-width: 720px){
@@ -329,7 +336,6 @@
 
 <body>
 
-<!-- ====== TELA NORMAL (preencher) ====== -->
 <div class="card" id="appCard">
   <div class="top-title">
     <div class="left">Grendene – Impressão Digital</div>
@@ -393,7 +399,6 @@
   </div>
 </div>
 
-<!-- ====== MODAL PRÉVIA ====== -->
 <div class="modal" id="modal">
   <div class="modal-box">
     <div class="modal-head">
@@ -410,10 +415,8 @@
   </div>
 </div>
 
-<!-- Palco de captura -->
 <div id="photoStage"></div>
 
-<!-- html2canvas -->
 <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
 
 <script>
@@ -442,7 +445,6 @@
 
   let lastBlob = null;
 
-  // ===== Ramais 1..6 =====
   for (let i=1; i<=6; i++){
     const label = document.createElement("label");
     label.className = "ramal-btn";
@@ -463,7 +465,6 @@
     return sel;
   }
 
-  // ===== Linhas =====
   motivos.forEach(m => {
     const tr = document.createElement("tr");
     tr.innerHTML = `
@@ -481,7 +482,7 @@
   function calcularTotal(){
     let soma = 0;
     document.querySelectorAll(".qtd-input").forEach(inp=>{
-      soma += Number(inp.value) || 0; // vazio = 0
+      soma += Number(inp.value) || 0;
     });
     totalCell.textContent = soma;
   }
@@ -492,7 +493,6 @@
     }
   });
 
-  // Data padrão hoje
   (function setHoje(){
     const d = new Date();
     const yyyy = d.getFullYear();
@@ -537,7 +537,6 @@
     return `Gerado em ${dd}/${mm}/${yyyy}, ${hh}:${mi}:${ss}`;
   }
 
-  // ===== Monta o “relatório foto” =====
   function buildPhotoNode(){
     photoStage.innerHTML = "";
 
@@ -592,7 +591,7 @@
     motivos.forEach((motivo, idx)=>{
       const qtd = Number(qtdInputs[idx]?.value) || 0;
       const just = (justInputs[idx]?.value || "").trim();
-      const qtdTxt = (qtd === 0 ? "" : String(qtd)); // ZERO não aparece
+      const qtdTxt = (qtd === 0 ? "" : String(qtd));
 
       const tr = document.createElement("tr");
       tr.innerHTML = `
@@ -607,7 +606,6 @@
     return wrapper;
   }
 
-  // ===== Prévia =====
   async function abrirPreview(){
     calcularTotal();
     lastBlob = null;
