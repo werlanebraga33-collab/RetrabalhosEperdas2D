@@ -22,27 +22,29 @@
     margin-bottom:14px;
   }
 
+  /* ===== Cabeçalho sem quebra ===== */
   .top-title{
     display:flex;
     justify-content:space-between;
+    align-items:center;
     gap:12px;
-    align-items:flex-start;
     border-bottom:1px solid #e7e7e7;
     padding-bottom:10px;
     margin-bottom:12px;
   }
   .top-title .left{
-    font-size:20px;
-    font-weight:700;
-    line-height:1.15;
+    font-size:22px;
+    font-weight:800;
+    white-space:nowrap;
   }
   .top-title .right{
     font-size:20px;
     color:#6b6b6b;
     text-align:right;
-    line-height:1.15;
+    white-space:nowrap;
   }
 
+  /* ===== Form (tela normal) ===== */
   .row{
     display:grid;
     grid-template-columns: 110px 1fr;
@@ -50,7 +52,6 @@
     align-items:center;
     margin:8px 0;
   }
-
   .label{ color:#666; }
 
   input[type="text"], input[type="date"], select{
@@ -64,7 +65,7 @@
     background:#fff;
   }
 
-  /* Ramais */
+  /* ===== Ramais (botões) ===== */
   .ramais-wrap{
     display:flex;
     flex-wrap:wrap;
@@ -90,12 +91,12 @@
     font-weight:700;
   }
 
-  /* Tabela */
+  /* ===== Tabela ===== */
   table{
     width:100%;
     border-collapse:collapse;
     margin-top:14px;
-    table-layout: fixed; /* importante pra controlar colunas */
+    table-layout: fixed; /* controla as colunas */
   }
   th, td{
     border:1px solid #d8d8d8;
@@ -109,12 +110,11 @@
     font-weight:700;
   }
 
-  /* Larguras das colunas (NORMAL) */
-  th.col-motivo, td.col-motivo { width: 32%; }
+  /* Larguras (tela normal) */
+  th.col-motivo, td.col-motivo { width: 34%; }
   th.col-qtd,   td.col-qtd    { width: 16%; text-align:center; }
-  th.col-just,  td.col-just   { width: 52%; }
+  th.col-just,  td.col-just   { width: 50%; }
 
-  /* Evitar quebrar palavras feio */
   td.col-just, td.col-motivo{
     word-break: normal;
     overflow-wrap: break-word;
@@ -171,36 +171,7 @@
     font-size:13px;
   }
 
-  /* Área do relatório */
-  #report{
-    background:#fff;
-  }
-
-  /* Modo foto: tira borda dos inputs e deixa como texto */
-  .photo-mode .qtd-input,
-  .photo-mode .just-input,
-  .photo-mode input[type="text"],
-  .photo-mode input[type="date"],
-  .photo-mode select{
-    border:none !important;
-    padding:0 !important;
-    border-radius:0 !important;
-    font-size:16px !important;
-    background:transparent !important;
-    box-shadow:none !important;
-    outline:none !important;
-  }
-  .photo-mode .ramal-btn{
-    border:none !important;
-    width:auto !important;
-    height:auto !important;
-    padding:0 !important;
-    border-radius:0 !important;
-    background:transparent !important;
-    box-shadow:none !important;
-  }
-
-  /* ======= PREVIEW MODAL ======= */
+  /* ======== Modal de prévia ======== */
   .modal{
     position: fixed;
     inset: 0;
@@ -251,28 +222,90 @@
     background:#fff;
   }
 
-  /* ======= “Palco” de captura (fora da tela) ======= */
+  /* ======== Palco de captura (fora da tela) ======== */
   #photoStage{
     position: fixed;
     left: -99999px;
     top: 0;
-    width: 900px;        /* <<< AQUI garante a foto larga */
+    width: 980px;     /* FOTO MAIS LARGA */
     background:#fff;
+  }
+
+  /* ======== Layout do cabeçalho/meta NA FOTO ======== */
+  .photo-card{
+    background:#fff;
+    border-radius:0;
+    box-shadow:none;
+    padding:18px 18px 14px;
+  }
+
+  .photo-header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:14px;
+    border-bottom:1px solid #e7e7e7;
+    padding-bottom:10px;
+    margin-bottom:10px;
+  }
+  .photo-header .h-left{
+    font-size:22px;
+    font-weight:800;
+    white-space:nowrap;
+  }
+  .photo-header .h-right{
+    font-size:20px;
+    color:#6b6b6b;
+    white-space:nowrap;
+  }
+
+  /* Meta distribuída (Responsável/Turno/Data/Ramais) na FOTO */
+  .meta-grid{
+    display:grid;
+    grid-template-columns: 1.6fr 0.6fr 0.8fr 1.2fr; /* resp e ramais maiores */
+    gap:10px 14px;
+    align-items:center;
+    margin:8px 0 12px;
+    font-size:16px;
+  }
+  .meta-item .m-label{
+    color:#666;
+    margin-right:8px;
+  }
+  .meta-item .m-value{
+    font-weight:700;
+  }
+
+  /* Foto: colunas com Justificativa maior */
+  .photo-table th.col-motivo, .photo-table td.col-motivo { width: 28%; }
+  .photo-table th.col-qtd,    .photo-table td.col-qtd    { width: 12%; text-align:center; }
+  .photo-table th.col-just,   .photo-table td.col-just   { width: 60%; }
+
+  .photo-footer{
+    margin-top:10px;
+    color:#777;
+    font-size:13px;
+  }
+
+  @media (max-width: 720px){
+    .top-title .left, .top-title .right { white-space:normal; }
+    .meta-grid{ grid-template-columns: 1fr 1fr; }
   }
 </style>
 </head>
 
 <body>
 
-<div class="card" id="report">
+<!-- ====== TELA NORMAL (preencher) ====== -->
+<div class="card" id="appCard">
   <div class="top-title">
-    <div class="left">Grendene –<br>Impressão<br>Digital</div>
-    <div class="right">Relatório de retrabalhos<br>e<br>perdas 2D</div>
+    <div class="left">Grendene – Impressão Digital</div>
+    <div class="right">Relatório de retrabalhos e perdas 2D</div>
   </div>
 
   <div class="row">
     <div class="label">Responsável:</div>
-    <div><input id="responsavel" type="text" value=""/></div>
+    <div><input id="responsavel" type="text" /></div>
   </div>
 
   <div class="row">
@@ -314,7 +347,7 @@
     </tfoot>
   </table>
 
-  <div class="small-note" id="geradoEm"></div>
+  <div class="small-note" id="statusHint"></div>
 </div>
 
 <div class="card">
@@ -323,11 +356,11 @@
     <button class="btn primary" onclick="abrirPreview()">Gerar Prévia</button>
   </div>
   <div class="small-note">
-    A prévia mostra a “foto” do relatório antes de enviar. Zeros não aparecem.
+    A prévia mostra a “foto” do relatório antes de enviar. Qtde vazia fica limpa e 0 não aparece na foto.
   </div>
 </div>
 
-<!-- Modal de prévia -->
+<!-- ====== MODAL PRÉVIA ====== -->
 <div class="modal" id="modal">
   <div class="modal-box">
     <div class="modal-head">
@@ -344,7 +377,7 @@
   </div>
 </div>
 
-<!-- Palco de captura (fora da tela) -->
+<!-- Palco de captura -->
 <div id="photoStage"></div>
 
 <!-- html2canvas -->
@@ -368,15 +401,15 @@
 
   const tbody = document.getElementById("tbody");
   const totalCell = document.getElementById("totalCell");
-  const geradoEm = document.getElementById("geradoEm");
   const ramaisWrap = document.getElementById("ramaisWrap");
   const modal = document.getElementById("modal");
   const previewImg = document.getElementById("previewImg");
   const photoStage = document.getElementById("photoStage");
+  const statusHint = document.getElementById("statusHint");
 
-  let lastBlob = null; // guarda a imagem gerada pra baixar/compartilhar
+  let lastBlob = null;
 
-  // Ramais 1..6
+  // ===== Ramais 1..6 =====
   for (let i=1; i<=6; i++){
     const label = document.createElement("label");
     label.className = "ramal-btn";
@@ -397,16 +430,16 @@
     return sel;
   }
 
-  // Monta linhas
+  // ===== Linhas =====
   motivos.forEach(m => {
     const tr = document.createElement("tr");
     tr.innerHTML = `
       <td class="col-motivo">${m}</td>
       <td class="col-qtd">
-        <input class="qtd-input" type="number" min="0" step="1" inputmode="numeric">
+        <input class="qtd-input" type="number" min="0" step="1" inputmode="numeric" placeholder="">
       </td>
       <td class="col-just">
-        <input class="just-input" type="text">
+        <input class="just-input" type="text" placeholder="">
       </td>
     `;
     tbody.appendChild(tr);
@@ -415,7 +448,7 @@
   function calcularTotal(){
     let soma = 0;
     document.querySelectorAll(".qtd-input").forEach(inp=>{
-      soma += Number(inp.value) || 0;
+      soma += Number(inp.value) || 0; // vazio = 0
     });
     totalCell.textContent = soma;
   }
@@ -426,7 +459,7 @@
     }
   });
 
-  // Data de hoje
+  // Data padrão hoje (input continua ISO, mas foto vai BR)
   (function setHoje(){
     const d = new Date();
     const yyyy = d.getFullYear();
@@ -445,8 +478,21 @@
       c.checked = false;
       ramaisWrap.children[idx].classList.remove("active");
     });
-    geradoEm.textContent = "";
     calcularTotal();
+    statusHint.textContent = "";
+  }
+
+  function escapeHtml(str){
+    return (str || "").replace(/[&<>"']/g, (m)=>({
+      "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"
+    }[m]));
+  }
+
+  function formatDateBR(iso){
+    // iso "YYYY-MM-DD" -> "DD/MM/YYYY"
+    if (!iso || !iso.includes("-")) return "";
+    const [yyyy, mm, dd] = iso.split("-");
+    return `${dd}/${mm}/${yyyy}`;
   }
 
   function formatGeradoEm(){
@@ -460,113 +506,92 @@
     return `Gerado em ${dd}/${mm}/${yyyy}, ${hh}:${mi}:${ss}`;
   }
 
-  // ======== Clona o relatório para o “palco” e prepara modo foto (largo + sem zeros) ========
-  function buildPhotoClone(){
-    // Limpa palco
+  // ===== Monta o “relatório foto” (largo e distribuído) =====
+  function buildPhotoNode(){
     photoStage.innerHTML = "";
 
-    // Clona cartão do relatório (report)
-    const report = document.getElementById("report");
-    const clone = report.cloneNode(true);
+    const responsavel = document.getElementById("responsavel").value || "";
+    const turno = document.getElementById("turno").value || "";
+    const dataIso = document.getElementById("data").value || "";
+    const dataBR = formatDateBR(dataIso);
+    const ramais = getRamaisSelecionados().join(", ");
 
-    // força modo foto
-    clone.classList.add("photo-mode");
+    const qtdInputs = document.querySelectorAll(".qtd-input");
+    const justInputs = document.querySelectorAll(".just-input");
 
-    // Ajuste: no clone, "Ramais:" vira texto "1, 5, 6"
-    const ramaisSel = getRamaisSelecionados();
-    const ramaisRow = clone.querySelector("#ramaisWrap");
-    if (ramaisRow){
-      ramaisRow.innerHTML = "";
-      const span = document.createElement("div");
-      span.style.fontSize = "16px";
-      span.style.fontWeight = "700";
-      span.textContent = ramaisSel.length ? ramaisSel.join(", ") : "";
-      ramaisRow.appendChild(span);
-    }
+    // cria HTML do relatório
+    const wrapper = document.createElement("div");
+    wrapper.className = "card photo-card";
 
-    // No clone: inputs viram valores “limpos”
-    // Responsável
-    const resp = document.getElementById("responsavel").value || "";
-    const respClone = clone.querySelector("#responsavel");
-    if (respClone){
-      respClone.outerHTML = `<span style="font-weight:700;">${escapeHtml(resp)}</span>`;
-    }
+    wrapper.innerHTML = `
+      <div class="photo-header">
+        <div class="h-left">Grendene – Impressão Digital</div>
+        <div class="h-right">Relatório de retrabalhos e perdas 2D</div>
+      </div>
 
-    // Turno
-    const turno = document.getElementById("turno").value;
-    const turnoClone = clone.querySelector("#turno");
-    if (turnoClone){
-      turnoClone.outerHTML = `<span style="font-weight:700;">${escapeHtml(turno)}</span>`;
-    }
+      <div class="meta-grid">
+        <div class="meta-item"><span class="m-label">Responsável:</span> <span class="m-value">${escapeHtml(responsavel)}</span></div>
+        <div class="meta-item"><span class="m-label">Turno:</span> <span class="m-value">${escapeHtml(turno)}</span></div>
+        <div class="meta-item"><span class="m-label">Data:</span> <span class="m-value">${escapeHtml(dataBR)}</span></div>
+        <div class="meta-item"><span class="m-label">Ramais:</span> <span class="m-value">${escapeHtml(ramais)}</span></div>
+      </div>
 
-    // Data
-    const data = document.getElementById("data").value || "";
-    const dataClone = clone.querySelector("#data");
-    if (dataClone){
-      dataClone.outerHTML = `<span style="font-weight:700;">${escapeHtml(data)}</span>`;
-    }
+      <table class="photo-table">
+        <thead>
+          <tr>
+            <th class="col-motivo">Motivo</th>
+            <th class="col-qtd">Qtde.</th>
+            <th class="col-just">Justificativa</th>
+          </tr>
+        </thead>
+        <tbody id="photoBody"></tbody>
+        <tfoot>
+          <tr class="tfoot-strong">
+            <td>TOTAL</td>
+            <td class="col-qtd">${escapeHtml(totalCell.textContent || "0")}</td>
+            <td></td>
+          </tr>
+        </tfoot>
+      </table>
 
-    // Qtde + Justificativa: esconder zeros (Qtde=0 vira vazio), manter justificativa visível
-    const rows = clone.querySelectorAll("tbody tr");
-    const qtdInputsOriginal = document.querySelectorAll(".qtd-input");
-    const justInputsOriginal = document.querySelectorAll(".just-input");
+      <div class="photo-footer">${escapeHtml(formatGeradoEm())}</div>
+    `;
 
-    rows.forEach((tr, idx)=>{
-      const qtd = Number(qtdInputsOriginal[idx]?.value) || 0;
-      const just = (justInputsOriginal[idx]?.value || "").trim();
+    const photoBody = wrapper.querySelector("#photoBody");
 
-      // Coluna qtd (vazio se 0)
-      const qtdCell = tr.querySelector(".col-qtd");
-      if (qtdCell){
-        qtdCell.innerHTML = `<div style="font-weight:700;">${qtd === 0 ? "" : String(qtd)}</div>`;
-      }
+    motivos.forEach((motivo, idx)=>{
+      const qtd = Number(qtdInputs[idx]?.value) || 0;
+      const just = (justInputs[idx]?.value || "").trim();
 
-      // Coluna justificativa (texto)
-      const justCell = tr.querySelector(".col-just");
-      if (justCell){
-        justCell.innerHTML = `<div>${escapeHtml(just)}</div>`;
-      }
+      // regra: ZERO não aparece
+      const qtdTxt = (qtd === 0 ? "" : String(qtd));
+
+      const tr = document.createElement("tr");
+      tr.innerHTML = `
+        <td class="col-motivo">${escapeHtml(motivo)}</td>
+        <td class="col-qtd"><strong>${escapeHtml(qtdTxt)}</strong></td>
+        <td class="col-just">${escapeHtml(just)}</td>
+      `;
+      photoBody.appendChild(tr);
     });
 
-    // Total
-    const total = totalCell.textContent || "0";
-    const totalClone = clone.querySelector("#totalCell");
-    if (totalClone) totalClone.textContent = total;
-
-    // Gerado em
-    const gerado = clone.querySelector("#geradoEm");
-    if (gerado) gerado.textContent = formatGeradoEm();
-
-    // Colunas mais “amigas” na FOTO: dá ainda mais espaço pra justificativa
-    const ths = clone.querySelectorAll("th");
-    ths.forEach(th=>{
-      // nada aqui, só garantindo existir
-    });
-
-    // Anexa clone no palco (com largura fixa 900px)
-    photoStage.appendChild(clone);
-
-    return clone;
+    photoStage.appendChild(wrapper);
+    return wrapper;
   }
 
-  function escapeHtml(str){
-    return str.replace(/[&<>"']/g, (m)=>({
-      "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"
-    }[m]));
-  }
-
-  // ======== Gera imagem (larga) e abre prévia ========
+  // ===== Prévia =====
   async function abrirPreview(){
     calcularTotal();
     lastBlob = null;
+    statusHint.textContent = "Gerando prévia...";
 
-    const clone = buildPhotoClone();
+    const node = buildPhotoNode();
 
     try{
-      const canvas = await html2canvas(clone, {
-        scale: 3,                 // <<< mais resolução
+      const canvas = await html2canvas(node, {
+        scale: 3,
         backgroundColor: "#ffffff",
-        width: 900               // <<< garante largura
+        width: 980
       });
 
       const blob = await new Promise(res => canvas.toBlob(res, "image/png", 1.0));
@@ -576,8 +601,10 @@
       previewImg.src = url;
 
       modal.classList.add("open");
+      statusHint.textContent = "";
     } catch (err){
       console.error(err);
+      statusHint.textContent = "";
       alert("Não foi possível gerar a prévia. Tente no Chrome.");
     }
   }
@@ -620,7 +647,6 @@
           text: "Relatório de retrabalhos e perdas 2D"
         });
       } else {
-        // fallback: baixa e manda manual
         baixarImagem();
         alert("Seu celular/navegador não permite compartilhar arquivo direto. A imagem foi baixada: envie no WhatsApp pela galeria.");
       }
