@@ -229,7 +229,7 @@
     background:#fff;
   }
 
-  /* ======== RELATÓRIO DA FOTO (ALTERAÇÕES VISÍVEIS) ======== */
+  /* ======== RELATÓRIO DA FOTO ======== */
   .photo-card{
     background:#fff;
     border-radius:0;
@@ -246,26 +246,24 @@
     padding-bottom:14px;
     margin-bottom:16px;
   }
-  /* >>> AUMENTO FORTE NO CABEÇALHO <<< */
   .photo-header .h-left{
-    font-size:34px;   /* AUMENTADO (era 26/30) */
+    font-size:34px;
     font-weight:900;
     white-space:nowrap;
   }
   .photo-header .h-right{
-    font-size:28px;   /* AUMENTADO (era 22/26) */
+    font-size:28px;
     color:#6b6b6b;
     white-space:nowrap;
   }
 
-  /* >>> AUMENTO NAS INFORMAÇÕES <<< */
   .meta-grid{
     display:grid;
     grid-template-columns: 1.6fr 0.6fr 0.8fr 1.2fr;
     gap:14px 22px;
     align-items:center;
     margin:12px 0 16px;
-    font-size:22px;   /* AUMENTADO (era 18/20) */
+    font-size:22px;
   }
   .meta-item .m-label{
     color:#666;
@@ -285,33 +283,40 @@
     padding:12px 12px;
     vertical-align:middle;
   }
+
+  /* >>> AUMENTO DO CABEÇALHO DA TABELA <<< */
   .photo-table th{
     background:#efefef;
     font-weight:900;
-    font-size:21px;   /* AUMENTADO */
+    font-size:23px;     /* MAIOR */
+    line-height: 1.15;
   }
+
+  /* >>> AUMENTO DO CORPO DA TABELA (MOTIVO + JUSTIFICATIVA) <<< */
   .photo-table td{
-    font-size:19px;   /* AUMENTADO */
+    font-size:22px;     /* MAIOR */
+    line-height: 1.25;  /* MAIS LEGÍVEL */
   }
 
   .photo-table th.col-motivo, .photo-table td.col-motivo { width: 28%; }
   .photo-table th.col-qtd,    .photo-table td.col-qtd    { width: 12%; text-align:center; }
   .photo-table th.col-just,   .photo-table td.col-just   { width: 60%; }
 
+  /* Quantidade ainda mais destacada */
   .photo-table td.col-qtd strong{
-    font-size:21px;
+    font-size:24px;     /* MAIOR */
     font-weight:900;
   }
 
-  /* >>> JUSTIFICATIVA CENTRALIZADA (H e V) <<< */
+  /* Justificativa centralizada (H e V) */
   .photo-table td.col-just{
-    padding:0; /* deixa o conteúdo realmente central */
+    padding:0;
   }
   .jwrap{
     display:flex;
-    align-items:center;       /* vertical */
-    justify-content:center;   /* horizontal */
-    text-align:center;        /* garante central mesmo em quebra de linha */
+    align-items:center;
+    justify-content:center;
+    text-align:center;
     width:100%;
     height:100%;
     padding:12px 12px;
@@ -319,7 +324,7 @@
     overflow-wrap: break-word;
     word-break: normal;
     hyphens: auto;
-    min-height: 34px;
+    min-height: 38px;
   }
 
   .photo-footer{
